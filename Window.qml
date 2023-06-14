@@ -22,9 +22,36 @@ ApplicationWindow{
             title: qsTr("&File")
             //RECOMMENDED Way: to encapsulate actions using MenuItem
             MenuItem{action: actions.openAction}
+//            MenuItem{ action: actions.folderAction}
             MenuItem{action: actions.closeAction}
             MenuItem{action: actions.exitAction}
+
+//            Menu{
+//                id:recentFilesMenu
+//                title: qsTr("Recent Files")
+
+//                Instantiator {
+//                    model: recentFilesModel
+//                    delegate: MenuItem {
+//                        text: model.name
+//                        onClicked: console.log(model.path)
+//                    }
+//                    onObjectAdded: recentFilesMenu.insertItem(index, object)
+//                    onObjectRemoved: recentFilesMenu.removeItem(object)
+//                }
+
+//                MenuSeparator {}
+//                MenuItem {
+//                    text: qsTr("Clear List")
+//                    onClicked: recentFilesModel.deleteEntries()
+//                }
+
+//            }
         }
+
+//        RecentFilesModel {
+//            id: recentFilesModel
+//        }
 
         Menu{
             title: qsTr("&Play")
@@ -37,7 +64,16 @@ ApplicationWindow{
         Menu {
             title: qsTr("&Help")
             //using Action object id as menu item
-            contentData:[ ]
+            contentData:[ actions.playListAction,
+                actions.aboutAction ]
+        }
+
+        Menu {
+            title: qsTr("&Track")
+            MenuBarItem{
+
+            }
+            contentData:["test1","test2"]
         }
     }
 
@@ -58,6 +94,9 @@ ApplicationWindow{
         id:actions
 
         openAction.onTriggered: content.dialog.openFileDialog()
+        folderAction.onTriggered: content.dialog.openFolderDialog()
+        aboutAction.onTriggered: content.dialog.openAboutDialog()
+        playListAction.onTriggered: content.dialog.openPlayListDialog()
         closeAction.onTriggered: Qt.quit()
 
         startAction.onTriggered: {

@@ -8,11 +8,14 @@ import QtQuick.Controls
 Item{
 
     property alias openAction: open
+    property alias folderAction: folder
     property alias closeAction: close
     property alias exitAction: exit
     property alias startAction: start
     property alias pauseAction: pause
     property alias stopAction: stop
+    property alias aboutAction: about
+    property alias playListAction: playList
 
     Action {
         id: open
@@ -21,6 +24,12 @@ Item{
         shortcut: "StandardKey.Open"
     }
 
+    Action{
+        id:folder
+        text: qsTr("OpenFold&er...")
+        icon.name: "document-open-recent"
+        shortcut: "Ctrl + d"
+    }
     Action {
         id: close
         text: qsTr("&Close")
@@ -55,4 +64,15 @@ Item{
 
     }
 
+    Action {
+        id: about
+        text: qsTr("&About")
+        icon.name: "help-about"
+    }
+
+    Action {
+        id: playList
+        text: qsTr("&Play List")
+        icon.name: "help-about"
+    }
 }

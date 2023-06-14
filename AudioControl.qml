@@ -12,6 +12,18 @@ Item {
 
     implicitHeight: buttons.height
 
+    function editAuidoButton(){
+                    if(volumeSlider.value >= 75)
+                    {
+                        muteButton.icon.name = "audio-volume-high"
+                    }else if(75 > volumeSlider.value && volumeSlider.value >= 25){
+                        muteButton.icon.name = "audio-volume-medium"
+                    }else if(volumeSlider.value < 25 ){
+                        muteButton.icon.name = "audio-volume-low"
+                    }
+                }
+
+
     RowLayout {
         anchors.fill: parent
 
@@ -26,6 +38,7 @@ Item {
                 radius: 50.0
                 icon.name: "audio-volume-high"
                 onClicked: { muted = !muted }
+
             }
         }
 
@@ -37,6 +50,8 @@ Item {
             enabled: true
             to: 100.0
             value: 100.0
+
+            onValueChanged: editAuidoButton()
         }
     }
 }

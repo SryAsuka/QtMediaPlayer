@@ -37,6 +37,7 @@ Item{
                 mediaPlayer: control.mediaPlayer
             }
 
+            RowLayout{
             AudioControl {
                 id: audio
                 Layout.minimumWidth: 100
@@ -44,9 +45,17 @@ Item{
                 Layout.fillWidth: true
                 mediaPlayer: control.mediaPlayer
 
+                }
+
+            PlaybackRateControl{
+                Layout.minimumWidth: 100
+                Layout.maximumWidth: 150
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                mediaPlayer: control.mediaPlayer
+            }
 
             }
         }
     }
-
 }

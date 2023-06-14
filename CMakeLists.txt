@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.26)
 
 project(QtMediaPlayer VERSION 0.1 LANGUAGES CXX)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Quick)
+find_package(Qt6 6.5 REQUIRED Core COMPONENTS Quick Multimedia)
+
 
 qt_standard_project_setup(REQUIRES 6.5)
 
@@ -11,7 +12,7 @@ qt_add_executable(appQtMediaPlayer)
 target_sources(appQtMediaPlayer
     PRIVATE
         main.cpp
-        
+
     PUBLIC
         
 )
@@ -19,6 +20,15 @@ target_sources(appQtMediaPlayer
 qt_add_qml_module(appQtMediaPlayer
     URI QtMediaPlayer
     VERSION 1.0
+    SOURCES
+#        videoframe.h videoframe.cpp
+    recentfileitem.h recentfileitem.cpp
+    recentfilesmodel.h recentfilesmodel.cpp
+    playlistmodel.h playlistmodel.cpp
+#    playitem.h playitem.cpp
+    playlistitem.h playlistitem.cpp
+
+
     QML_FILES 
         Window.qml
         Content.qml
@@ -27,7 +37,15 @@ qt_add_qml_module(appQtMediaPlayer
         PlaybackControl.qml
         PlaybackSeekControl.qml
         AudioControl.qml
+        PlaybackRateControl.qml
+
 )
+#qt_add_qml_module(appVideotest
+#    URI com.videotest.mult
+#    VERSION 1.0
+#        SOURCES
+#            videoframe.h videoframe.cpp
+#)
 
 target_compile_features(appQtMediaPlayer PRIVATE cxx_std_20)
 
@@ -43,7 +61,9 @@ set_target_properties(appQtMediaPlayer PROPERTIES
 target_link_libraries(appQtMediaPlayer
     PRIVATE 
         Qt6::Quick
-)
+#        Qt6::Multimedia
+        mediainfo
+    )
 
 install(TARGETS appQtMediaPlayer
     BUNDLE DESTINATION .
@@ -52,6 +72,18 @@ install(TARGETS appQtMediaPlayer
 )
 
 
+
+#set(QtMediaPlayer_control_file
+#    "qml/qmlcontrol/PlaybackControl.qml"
+#)
+
+
+#qt_add_resources(qmlcontrol "qmlcontrol"
+#    PREFIX
+#        "/"
+#    FILES
+#        ${qml_control_files}
+#)
 
 
 

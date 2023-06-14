@@ -37,12 +37,21 @@ Item{
         }
         videoOutput: videoOutput
 
+
+//        onActiveSubtitleTrackChanged:
+//        activeSubtitleTrack:0
     }
 
     //set videooutput
     VideoOutput {
             id: videoOutput
             anchors.fill: parent
+            
+            
+//            VideoSink{
+
+            
+//            }
          }
 
     //set full screen or not
@@ -57,7 +66,11 @@ Item{
         id:allDialog
         //get file path
         fileOpenDialog.onAccepted:
-            setVideoPath(fileOpenDialog.selectedFile)
+        {
+            dialog.setFilesModel(fileOpenDialog.selectedFile)
+        }
+        folderOpenDialog.onAccepted:
+            dialog.setFolderMode(folderOpenDialog.selectedFolder)
 
     }
 }
