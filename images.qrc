@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>../icon/close.png</file>
+        <file>../icon/max.png</file>
+        <file>../icon/min.png</file>
+        <file>../icon/search.png</file>
+        <file>../icon/setting.png</file>
+        <file>../icon/video.png</file>
+        <file>../icon/569F16127F4ABB3053502E5A01BABBA9.jpg</file>
+    </qresource>
+</RCC>
