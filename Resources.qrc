@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>assets/icon/video.png</file>
+        <file>assets/icon/setting.png</file>
+        <file>assets/icon/search.png</file>
+        <file>assets/icon/min.png</file>
+        <file>assets/icon/max.png</file>
+        <file>assets/icon/close.png</file>
+        <file>assets/icon/play.png</file>
+        <file>assets/icon/start.png</file>
+    </qresource>
+</RCC>
