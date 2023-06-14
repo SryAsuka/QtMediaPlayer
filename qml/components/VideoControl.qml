@@ -11,37 +11,29 @@ import QtMultimedia
 import "../pages"
 
 // 视频控制区域
-Item {
+Rectangle {
     id: videoControl
-    property int progressHeight: 80
+    property int progressHeight: 120
     property MediaPlayer player
     property Timer hideTimer
-    readonly property bool bRunning: player.playbackState
+    property BulletscreenComponent bulletscreenComponent
+    // 是否显示音量滑块
+    property bool bAudioVisable: false
+    // 播放速度
+    property double videoSpeed: 1
+    // 是否全屏
+    property bool bFullSreen: false
+    // 视频是否播放
+    readonly property bool bRunning: player.playbackState == MediaPlayer.PlayingState
 
     width: parent.width
     height: progressHeight
 
-    Item{
-        y:0
-        width: parent.width
-        height: parent.height/2
-        Row {
-            anchors.horizontalCenter: parent.horizontalCenter
-            Button{
-                icon.source: "qrc:/assets/icon/close.png"
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("后退30秒")
-                onClicked: {
-                    console.log("8888")
-                }
-            }
-
-        }
-     }
     // 进度条区域
     Rectangle {
         id: progressRow
         height: progressHeight
+        color: "transparent"
         anchors {
             bottom: parent.bottom
             left: parent.left
@@ -54,7 +46,7 @@ Item {
             // 设置进度条锚点
             anchors {
                 top: parent.top
-                topMargin: 20
+                topMargin: 30
                 left: durationTime.right
                 leftMargin: 20
                 right: endTime.left
@@ -97,8 +89,8 @@ Item {
                 x: progressBar.leftPadding + progressBar.visualPosition
                                        * (progressBar.availableWidth - width)
                 y: progressBar.topPadding + progressBar.availableHeight / 2 - height / 2
-                implicitWidth: 29
-                implicitHeight: 29
+                implicitWidth: 15
+                implicitHeight: 15
                 radius: 10
                 border.color: "#bdbebf"    // 滑块边框颜色
                 // 判断滑块按压状态，设置不同的颜色
@@ -198,41 +190,317 @@ Item {
                 else    return minutes + ":" + seconds
             }
         }
+    }
 
-        // 下方播放、弹幕区域
-        Row {
+    // 下方播放、弹幕区域
+    Item {
+        anchors {
+            bottom: parent.bottom
+            left: parent.left
+            right: parent.right
+        }
+        height: 60
+
+        // 上一个
+        Button {
+            id: upButton
             anchors {
-                top: progressBar.bottom
+                verticalCenter: parent.verticalCenter
                 left: parent.left
-                right: parent.right
+                leftMargin: 30
             }
 
-            // 播放按钮
-            Button {
-                icon.source: bRunning ? "qrc:/assets/icon/start.png" : "qrc:/assets/icon/start.png"
-                ToolTip.visible: hovered
-                ToolTip.text: bRunning ? "暂停" : "开始"
-                onClicked: {
-                    if(!bRunning){
-                        player.play()
+            opacity: 0.8    // 设置透明度
+            // 设置背景为透明
+            background: Rectangle {
+                color: "transparent"
+
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true  // 启用鼠标悬停
+                    propagateComposedEvents: true
+                    onPositionChanged: {
+                        hideTimer.stop()
+                    }
+
+                }
+            }
+
+            // 图标设置
+            icon.source: "qrc:/assets/icon/up.png"
+            icon.height: 25
+            icon.width: 25
+            ToolTip.visible: hovered
+            ToolTip.text: "上一个"
+
+            onClicked: {
+                // 实现上一个
+            }
+        }
+
+        // 播放按钮
+        Button {
+            id: playButton
+            anchors {
+                verticalCenter: parent.verticalCenter
+                left: upButton.right
+                leftMargin: 30
+            }
+
+            opacity: 0.8    // 设置透明度
+            // 设置背景为透明
+            background: Rectangle {
+                color: "transparent"
+
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true  // 启用鼠标悬停
+                    propagateComposedEvents: true
+                    onPositionChanged: {
+                        hideTimer.stop()
+                    }
+                }
+            }
+
+            // 图标设置
+            icon.source: bRunning ? "qrc:/assets/icon/pause.png" : "qrc:/assets/icon/start.png"
+            icon.height: 30
+            icon.width: 30
+            ToolTip.visible: hovered
+            ToolTip.text: bRunning ? "暂停" : "开始"
+
+            onClicked: {
+                if(!bRunning){
+                    player.play()
+                } else {
+                    player.pause()
+                }
+            }
+        }
+
+        // 下一个
+        Button {
+            id: nextButton
+            anchors {
+                verticalCenter: parent.verticalCenter
+                left: playButton.right
+                leftMargin: 30
+            }
+
+            opacity: 0.8    // 设置透明度
+            // 设置背景为透明
+            background: Rectangle {
+                color: "transparent"
+
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true  // 启用鼠标悬停
+                    propagateComposedEvents: true
+                    onPositionChanged: {
+                        hideTimer.stop()
+                    }
+
+                }
+            }
+
+            // 图标设置
+            icon.source: "qrc:/assets/icon/next.png"
+            icon.height: 25
+            icon.width: 25
+            ToolTip.visible: hovered
+            ToolTip.text: "下一个"
+
+            onClicked: {
+                // 实现下一个
+            }
+        }
+
+        // 弹幕条
+        BulletscreenComponent {
+            id: bulletscreenComponent
+            hideTimer: videoControl.hideTimer
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                verticalCenter: parent.verticalCenter
+            }
+        }
+
+        // 倍速按钮
+        Button {
+            id: videoSpeedButton
+            anchors {
+                verticalCenter: parent.verticalCenter
+                left: bulletscreenComponent.right
+                leftMargin: 30
+            }
+
+            contentItem: Text {
+                id: videoSpeedText
+                text: "x1"
+                color: "white"
+                font.pixelSize: 18
+                font.weight: Font.Bold
+            }
+
+            opacity: 0.8    // 设置透明度
+            // 设置背景为透明
+            background: Rectangle {
+                color: "transparent"
+
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true  // 启用鼠标悬停
+                    propagateComposedEvents: true
+                    onPositionChanged: {
+                        hideTimer.stop()
+                    }
+
+                }
+            }
+
+            // 图标设置
+            icon.source: "qrc:/assets/icon/next.png"
+
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("播放速度")
+            onClicked: {
+                if(videoSpeed == 1){
+                    videoSpeed  = 2
+                    videoSpeedText.text = "x2"
+                }
+                else if(videoSpeed  == 2){
+                    videoSpeed  = 4
+                    videoSpeedText.text = "x4"
+                }
+                else if(videoSpeed  == 4){
+                    videoSpeed  = 8
+                    videoSpeedText.text = "x8"
+                }
+                else if(videoSpeed  == 8){
+                    videoSpeed  = 1
+                    videoSpeedText.text = "x1"
+                }
+            }
+        }
+
+        // 音量按钮
+        Button {
+            id: volumeButton
+
+            anchors {
+                verticalCenter: videoSpeedButton.verticalCenter
+                left: videoSpeedButton.right
+                leftMargin: 30
+            }
+
+            opacity: 0.8    // 设置透明度
+            // 设置背景为透明
+            background: Rectangle {
+                color: "transparent"
+
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true  // 启用鼠标悬停
+                    propagateComposedEvents: true
+                    onPositionChanged: {
+                        hideTimer.stop()
+                    }
+
+                }
+            }
+
+            // 图标设置
+            icon.source: "qrc:/assets/icon/volume.png"
+            icon.height: 30
+            icon.width: 30
+
+            onClicked: {
+                bAudioVisable = !bAudioVisable
+            }
+
+            Slider {
+                id: volumeSlider
+                anchors {
+                    bottom: volumeButton.top
+                    topMargin: 10
+                }
+
+                visible: bAudioVisable
+                // 音量条为竖的
+                orientation: Qt.Vertical
+                from: 0
+                value: 50
+                to: 100
+                onValueChanged: {
+                    player.audioOutput.volume = value / 100
+
+                    if (value === 0) {
+                        volumeButton.icon.source = "qrc:/assets/icon/volumeMute.png"
                     } else {
-                        player.pause()
+                        volumeButton.icon.source = "qrc:/assets/icon/volume.png"
                     }
                 }
             }
         }
 
-        // 设置背景渐变效果
-        gradient: Gradient {
-           GradientStop {
-               position: 0.2
-               color: "transparent"
-           }
-           GradientStop {
-               position: 1.0
-               color: Qt.rgba(0, 0, 0, 0.8)
-           }
+        // 全屏/缩小按钮
+        Button {
+            id: fullScreenButton
+            anchors {
+                verticalCenter: parent.verticalCenter
+                right: parent.right
+                rightMargin: 30
+            }
+
+            opacity: 0.8    // 设置透明度
+            // 设置背景为透明
+            background: Rectangle {
+                color: "transparent"
+
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true  // 启用鼠标悬停
+                    propagateComposedEvents: true
+                    onPositionChanged: {
+                        hideTimer.stop()
+                    }
+
+                }
+            }
+
+            // 图标设置
+            icon.source: bFullSreen ? "qrc:/assets/icon/videoMin.png" : "qrc:/assets/icon/videoMax.png"
+            icon.height: 30
+            icon.width: 30
+            ToolTip.visible: hovered
+            ToolTip.text: bFullSreen ? "退出全屏" : "进入全屏"
+
+            onClicked: {
+                if (bFullSreen === true) {
+                    Qt.application.visibility = Window.Windowed
+
+                    bFullSreen = false
+                    fullScreenButton.icon.source = "qrc:/assets/icon/videoMax.png"
+                } else {
+                    Qt.application.visibility = Window.FullScreen
+                    bFullSreen = true
+                    fullScreenButton.icon.source = "qrc:/assets/icon/videoMin.png"
+                }
+            }
         }
+
+    }
+
+    // 设置背景渐变效果
+    gradient: Gradient {
+       GradientStop {
+           position: 0.2
+           color: "transparent"
+       }
+       GradientStop {
+           position: 1.0
+           color: Qt.rgba(0, 0, 0, 0.8)
+       }
     }
 }
 
