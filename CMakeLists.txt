@@ -2,36 +2,53 @@ cmake_minimum_required(VERSION 3.26)
 
 project(untitled4 VERSION 0.1 LANGUAGES CXX)
 
-find_package(Qt6 6.4 REQUIRED COMPONENTS Quick)
+# 配置通用编译
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+if(APPLE)
+    set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64" CACHE STRING "" FORCE)
+endif()
 
-qt_standard_project_setup()
+find_package(Qt6 6.5 REQUIRED COMPONENTS Quick)
 
-qt_add_executable(appuntitled4)
+qt_standard_project_setup(REQUIRES 6.5)
 
-target_sources(appuntitled4
-    PRIVATE
-        main.cpp
-        imgs.qrc
-
-    PUBLIC
-        
+qt_add_executable(appQtMediaPlayer
+    main.cpp
+    Resources.qrc
 )
 
-qt_add_qml_module(appuntitled4
-    URI untitled4
+# 设置版本号
+add_definitions(-DVERSION=1,0,0,0)
+
+# 获取文件路径分隔符（解决执行命令的时候有些平台会报错）
+file(TO_CMAKE_PATH "/" PATH_SEPARATOR)
+
+# 遍历所有cpp文件
+file(GLOB_RECURSE CPP_FILES *.cpp *.h)
+foreach(filepath ${CPP_FILES})
+    string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/" "" filename ${filepath})
+    list(APPEND sources_files ${filename})
+endforeach(filepath)
+
+# 遍历所有qml文件
+file(GLOB_RECURSE QML_PATHS *.qml)
+foreach(filepath ${QML_PATHS})
+    string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/" "" filename ${filepath})
+    list(APPEND qml_files ${filename})
+endforeach(filepath)
+
+# 添加qml模块
+qt_add_qml_module(appQtMediaPlayer  # 这里为项目名
+    URI QtMediaPlayer   # 项目名去掉前缀app
     VERSION 1.0
-    QML_FILES 
-        Main.qml
-        MenuButton.qml
-        Show.qml
-        RoundImage.qml
-        Content.qml
-
+    QML_FILES ${qml_files}
+    RESOURCES ${resource_files}
 )
 
-target_compile_features(appuntitled4 PRIVATE cxx_std_20)
+target_compile_features(appQtMediaPlayer PRIVATE cxx_std_20)
 
-set_target_properties(appuntitled4 PROPERTIES
+set_target_properties(appQtMediaPlayer PROPERTIES
     AUTORCC TRUE
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
@@ -40,12 +57,13 @@ set_target_properties(appuntitled4 PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
-target_link_libraries(appuntitled4
-    PRIVATE 
+# 链接库
+target_link_libraries(appQtMediaPlayer
+    PRIVATE
         Qt6::Quick
 )
 
-install(TARGETS appuntitled4
+install(TARGETS appQtMediaPlayer
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}

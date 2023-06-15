@@ -9,7 +9,7 @@ Item {
     Image {
         id:img
         anchors.fill: parent
-        source: "qrc:/picture/img1.jpg"
+        source: "qrc:/assets/picture/img1.jpg"
     }
 
     Rectangle
@@ -40,7 +40,7 @@ Item {
         onClicked: {
             index--
             if(index<1) index=3
-            img.source="qrc:/picture/img"+index+".jpg"
+            img.source="qrc:/assets/picture/img"+index+".jpg"
             leftbtn.color="#000000"}
         }
 
@@ -70,12 +70,12 @@ Item {
 
         MouseArea{
         anchors.fill: rightbtn
-        cursorShape: rightbtn.enabled?Qt.PointingHandCursor:Qt.ForbiddenCursor
-        onPressed: {rightbtn.color="#FFFFFF"}
+        cursorShape: rightbtn.enabled ? Qt.PointingHandCursor : Qt.ForbiddenCursor
+        onPressed: { rightbtn.color="#FFFFFF" }
         onClicked: {
             index++
             if(index>3) index=1
-            img.source="qrc:/picture/img"+index+".jpg"
+            img.source="qrc:/assets/picture/img"+index+".jpg"
             rightbtn.color="#000000"}
         }
 
