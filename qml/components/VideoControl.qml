@@ -4,6 +4,7 @@
  * 2023.6.13，添加进度条以及两侧的时间显示
  * 2023.6.14上午：增加滑块样式
  * 2023.6.14下午：增加进度条拖动功能
+ * 2023.6.15上午：实现全屏
  */
 import QtQuick
 import QtQuick.Controls
@@ -422,7 +423,7 @@ Rectangle {
                 id: volumeSlider
                 anchors {
                     bottom: volumeButton.top
-                    topMargin: 10
+                    bottomMargin: 10
                 }
 
                 visible: bAudioVisable
@@ -438,6 +439,15 @@ Rectangle {
                         volumeButton.icon.source = "qrc:/assets/icon/volumeMute.png"
                     } else {
                         volumeButton.icon.source = "qrc:/assets/icon/volume.png"
+                    }
+                }
+
+                // 当进度条在拖放时，不要启动隐藏计时器
+                onPressedChanged: {
+                    if (pressed) {
+                        hideTimer.stop()
+                    } else {
+                        hideTimer.restart()
                     }
                 }
             }
@@ -477,12 +487,12 @@ Rectangle {
 
             onClicked: {
                 if (bFullSreen === true) {
-                    Qt.application.visibility = Window.Windowed
+                    mainWindow.visibility = Window.Windowed
 
                     bFullSreen = false
                     fullScreenButton.icon.source = "qrc:/assets/icon/videoMax.png"
                 } else {
-                    Qt.application.visibility = Window.FullScreen
+                    mainWindow.visibility = Window.FullScreen
                     bFullSreen = true
                     fullScreenButton.icon.source = "qrc:/assets/icon/videoMin.png"
                 }

@@ -12,6 +12,8 @@ Rectangle {
 
     property alias video: video
     property alias player: player
+    // 是否全屏
+    property bool bFullSreen: false
 
     id: videoPlayer
     color: "black"
@@ -36,6 +38,7 @@ Rectangle {
 
         player: player
         hideTimer: starButton.hideTimer
+        bFullSreen: playerPage.bFullSreen
 
         // 出现设置
         opacity: 0  // 默认透明度为0，即完全透明
@@ -62,6 +65,27 @@ Rectangle {
         color: "transparent"
         MouseArea{
             anchors.fill: parent
+
+            // 避免双击/单击事件同时触发
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
+                property alias oneClickThreshold:timer.interval
+                Timer{
+                    id:timer
+                    interval: 200
+                    onTriggered: singleClick()   //计时超时，触发单击事件
+                }
+                onClicked: {
+                    if(mouse.button == Qt.RightButton) {
+                        if(timer.running)   //在阈值时间内发生第二次点击
+                        {
+                            dblClick()   //触发双击事件
+                            timer.stop()   //停止计时，直到下一次点击
+                        }
+                        else
+                            timer.restart()    //此次点击前没有计时，启动计时
+                    }
+                }
+
             // 判断视频播放状态，点击时，不是播放状态就进行播放，播放状态就暂停
             onClicked: {
                 if(player.playbackState !== MediaPlayer.PlayingState){
@@ -70,6 +94,17 @@ Rectangle {
                 }else{
                     videoPause()
                     imagerForStart.opacity = 0.7
+                }
+            }
+
+            onDoubleClicked: {
+                if (bFullSreen === true) {
+                    mainWindow.visibility = Window.Windowed
+
+                    bFullSreen = false
+                } else {
+                    mainWindow.visibility = Window.FullScreen
+                    bFullSreen = true
                 }
             }
         }
@@ -103,7 +138,7 @@ Rectangle {
             onPositionChanged: {
                 videoControl.opacity = 1;  // 修改透明度为1，即完全不透明
                 hideProgressBarTimer.restart();
-            }
+            }      
 
             Behavior on opacity {  // 添加动画行为
                 OpacityAnimator { duration: 300 }

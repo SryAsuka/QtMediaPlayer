@@ -82,6 +82,8 @@ Item {
             icon.source: "qrc:/assets/icon/bulletSetting.png"
             icon.height: 30
             icon.width: 30
+            ToolTip.visible: hovered
+            ToolTip.text: "弹幕设置"
 
             onClicked: {
                 // 弹幕设置
