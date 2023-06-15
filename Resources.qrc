@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-<<<<<<< HEAD
         <file>assets/icon/video.png</file>
         <file>assets/icon/setting.png</file>
         <file>assets/icon/search.png</file>
@@ -26,10 +25,8 @@
         <file>assets/icon/collectOn.png</file>
         <file>assets/icon/collectOff.png</file>
         <file>assets/icon/fileList.png</file>
-=======
         <file>assets/picture/img3.jpg</file>
         <file>assets/picture/img2.jpg</file>
         <file>assets/picture/img1.jpg</file>
->>>>>>> 268fc4f (for dat3 :the change for struction)
     </qresource>
 </RCC>

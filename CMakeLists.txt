@@ -125,44 +125,4 @@ install(TARGETS appMediaPlayer
 
 
 
-<<<<<<< HEAD
-#qt_add_executable(MediaPlayer)  //Creates and finalizes an application target of a platform-specific type.
-=======
-#qt_add_executable(untitled4)  //Creates and finalizes an application target of a platform-specific type.
->>>>>>> b254fcf (for MajoryUi)
-#This command performs the following tasks:
-#    1. Create a CMake target of the appropriate type for the target platform.
-#    2. Link the target to the Qt::Core library.
-#    3. Handle finalization of the CMake target.
 
-
-
-# qt_standard_project_setup()     #set(CMAKE_AUTOUIC ON)  set(CMAKE_AUTOMOC ON)
-
-# @if %{HasTranslation}
-# find_package(Qt6 REQUIRED COMPONENTS Core Quick LinguistTools)
-# @else
-# find_package(Qt6 REQUIRED COMPONENTS Core Quick)
-# @endif
-
-<<<<<<< HEAD
-# target_sources(appMediaPlayer
-=======
-# target_sources(appuntitled4
->>>>>>> b254fcf (for MajoryUi)
-#     PRIVATE
-#         main.cpp
-#         qml.qrc
-#     @if %{HasTranslation}
-#         %{TsFileName}
-#     @endif
-#         
-#     PUBLIC
-#         
-# )
-
-<<<<<<< HEAD
-# qt_import_qml_plugins(MediaPlayer)
-=======
-# qt_import_qml_plugins(untitled4)
->>>>>>> b254fcf (for MajoryUi)
