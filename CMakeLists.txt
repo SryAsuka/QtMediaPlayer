@@ -125,11 +125,6 @@ install(TARGETS appMediaPlayer
 
 
 
-
-
-
-
-
 <<<<<<< HEAD
 #qt_add_executable(MediaPlayer)  //Creates and finalizes an application target of a platform-specific type.
 =======

@@ -7,7 +7,7 @@ Item {
     property alias img: img.source
     width: 300
     height: 150
-    Rectangle{
+    Rectangle {
         id:rec
         color: "red"
         radius: 5
@@ -19,6 +19,7 @@ Item {
             source: ""
 
         }
+
         Text {
             id: txt
             color: "#FFFFFF"
@@ -27,9 +28,10 @@ Item {
             anchors.topMargin: 10
             text: qsTr("For test")
         }
-        MouseArea{
-        anchors.fill: parent
-        cursorShape: rec.enabled?Qt.PointingHandCursor:Qt.ForbiddenCursor
+
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: rec.enabled ? Qt.PointingHandCursor : Qt.ForbiddenCursor
         }
     }
 
