@@ -19,6 +19,8 @@ Rectangle {
     readonly property bool bRunning: player.playbackState == MediaPlayer.PlayingState
     // 是否开启字幕
     property bool bCaptionOn: true
+    // 是否被收藏
+    property bool bCollect: false
 
     id: videoPlayer
     color: "black"
@@ -52,16 +54,24 @@ Rectangle {
     }
 
     // 加载VideoTitleBar视频标题组建
-//    VideoTitleBar {
-//        id: videoTitleBar
-//        anchors.top: parent.top
-//    }
+    VideoTitleBar {
+        id: videoTitleBar
+        anchors.top: parent.top
+        hideTimer: starButton.hideTimer
+
+        // 出现设置
+        opacity: 0  // 默认透明度为0，即完全透明
+        Behavior on opacity {  // 添加动画行为
+            OpacityAnimator { duration: 300 }
+        }
+    }
 
     // 屏幕中间的播放按钮，点击一下视频暂停图标显示，再点击视频播放图标隐藏
     Rectangle{
         id:starButton
         anchors {
             fill: parent
+            topMargin: videoTitleBar.videoTitleHeight
             bottomMargin: videoControl.progressHeight
         }
 
@@ -110,7 +120,7 @@ Rectangle {
             }
         }
 
-        // 鼠标监听区域,实现鼠标移动视频控制组件出现
+        // 鼠标监听区域,实现鼠标移动视频控制组件、视频标题组件出现
         MouseArea {
             id: mouseArea
             anchors.fill: parent
@@ -119,7 +129,8 @@ Rectangle {
 
             // 鼠标移动时显示进度条和播放/暂停按钮，并启动计时器
             onPositionChanged: {
-                videoControl.opacity = 1;  // 修改透明度为1，即完全不透明
+                videoControl.opacity = 1;  // 修改透明度为1
+                videoTitleBar.opacity = 1;
                 hideProgressBarTimer.restart();
             }      
 
@@ -136,6 +147,7 @@ Rectangle {
             repeat: false
             onTriggered: {
                 videoControl.opacity = 0;  // 修改透明度为0，即完全透明
+                videoTitleBar.opacity = 0;
             }
         }
     }

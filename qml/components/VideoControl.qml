@@ -439,13 +439,15 @@ Rectangle {
                 color: "transparent"
 
                 MouseArea {
+                    id: volumeMouseArea
                     anchors.fill: parent
                     hoverEnabled: true  // 启用鼠标悬停
                     propagateComposedEvents: true
                     onPositionChanged: {
                         hideTimer.stop()
+                        hideVolumeTimer.stop()
+                        bAudioVisable = true
                     }
-
                 }
             }
 
@@ -455,7 +457,8 @@ Rectangle {
             icon.width: 30
 
             onClicked: {
-                bAudioVisable = !bAudioVisable
+                volumeButton.icon.source = "qrc:/assets/icon/volumeMute.png"
+                volumeSlider.value = 0
             }
 
             Slider {
@@ -463,6 +466,8 @@ Rectangle {
                 anchors {
                     bottom: volumeButton.top
                     bottomMargin: 10
+                    left: volumeButton.left
+                    leftMargin: 5
                 }
 
                 visible: bAudioVisable
@@ -481,13 +486,27 @@ Rectangle {
                     }
                 }
 
-                // 当进度条在拖放时，不要启动隐藏计时器
+                // 当进度条在拖放时，不要启动隐藏计时器，不要隐藏音量条
                 onPressedChanged: {
                     if (pressed) {
                         hideTimer.stop()
+                        hideVolumeTimer.stop()
                     } else {
                         hideTimer.restart()
+                        hideVolumeTimer.restart()
                     }
+                }
+            }
+
+            // 隐藏音量条的计时器
+            Timer {
+                id: hideVolumeTimer
+                interval: 1000  // 1s后自动隐藏
+                // 鼠标不在按钮上时，开始计时
+                running: !volumeMouseArea.containsMouse
+                repeat: false
+                onTriggered: {
+                    bAudioVisable = false
                 }
             }
         }
@@ -533,8 +552,8 @@ Rectangle {
 
             // 图标设置
             icon.source: "qrc:/assets/icon/setting.png"
-            icon.height: 30
-            icon.width: 30
+            icon.height: 28
+            icon.width: 28
             ToolTip.visible: hovered
             ToolTip.text: "设置"
 
