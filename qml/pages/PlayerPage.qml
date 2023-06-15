@@ -2,6 +2,7 @@
  * 作者：范榆康
  * 日期：2023.6.13
  * 播放页面
+ * 2023.6.15上午：实现双击全屏
  */
 import QtQuick
 import QtQuick.Controls
@@ -14,6 +15,10 @@ Rectangle {
     property alias player: player
     // 是否全屏
     property bool bFullSreen: false
+    // 视频是否播放
+    readonly property bool bRunning: player.playbackState == MediaPlayer.PlayingState
+    // 是否开启字幕
+    property bool bCaptionOn: true
 
     id: videoPlayer
     color: "black"
@@ -27,7 +32,7 @@ Rectangle {
     MediaPlayer {
         id: player
         audioOutput: AudioOutput {}
-        source: "file:///run/media/root/坠梦之盘/作品集/视频/鬼畜.mp4"
+        source: "file:///run/media/root/坠梦之盘/作品集/视频/成渝大赛-采访.mp4"
         videoOutput: video
     }
 
@@ -38,7 +43,6 @@ Rectangle {
 
         player: player
         hideTimer: starButton.hideTimer
-        bFullSreen: playerPage.bFullSreen
 
         // 出现设置
         opacity: 0  // 默认透明度为0，即完全透明
@@ -68,45 +72,24 @@ Rectangle {
 
             // 避免双击/单击事件同时触发
             acceptedButtons: Qt.LeftButton | Qt.RightButton
-                property alias oneClickThreshold:timer.interval
-                Timer{
-                    id:timer
-                    interval: 200
-                    onTriggered: singleClick()   //计时超时，触发单击事件
-                }
-                onClicked: {
-                    if(mouse.button == Qt.RightButton) {
-                        if(timer.running)   //在阈值时间内发生第二次点击
-                        {
-                            dblClick()   //触发双击事件
-                            timer.stop()   //停止计时，直到下一次点击
-                        }
-                        else
-                            timer.restart()    //此次点击前没有计时，启动计时
-                    }
-                }
-
-            // 判断视频播放状态，点击时，不是播放状态就进行播放，播放状态就暂停
+            property alias oneClickThreshold : timer.interval
+            Timer{
+                id:timer
+                interval: 200
+                onTriggered: singleClick()   //计时超时，触发单击事件
+            }
             onClicked: {
-                if(player.playbackState !== MediaPlayer.PlayingState){
-                    videoPlay()
-                    imagerForStart.opacity = 0
-                }else{
-                    videoPause()
-                    imagerForStart.opacity = 0.7
+                if(mouse.button === Qt.LeftButton) {
+                    if(timer.running)   //在阈值时间内发生第二次点击
+                    {
+                        dblClick()   //触发双击事件
+                        timer.stop()   //停止计时，直到下一次点击
+                    }
+                    else
+                        timer.restart()    //此次点击前没有计时，启动计时
                 }
             }
 
-            onDoubleClicked: {
-                if (bFullSreen === true) {
-                    mainWindow.visibility = Window.Windowed
-
-                    bFullSreen = false
-                } else {
-                    mainWindow.visibility = Window.FullScreen
-                    bFullSreen = true
-                }
-            }
         }
         Image {
             id: imagerForStart
@@ -157,17 +140,50 @@ Rectangle {
         }
     }
 
+    // 播放开始
     function videoPlay() {
         player.play();
     }
 
+    // 播放暂停
     function videoPause() {
         player.pause();
     }
 
+    // 停止播放
     function videoStop() {
         player.stop();
     }
 
+    // 单击事件
+    function singleClick() {
+        if(!bRunning) {
+            videoPlay()
+        }else{
+            videoPause()
+        }
+        bShowPlayIcon()
+    }
 
+    // 双击事件
+    function dblClick() {
+        if (bFullSreen === true) {
+            mainWindow.visibility = Window.Windowed
+            bFullSreen = false
+            videoControl.changeFullScreenIcon()
+        } else {
+            mainWindow.visibility = Window.FullScreen
+            bFullSreen = true
+            videoControl.changeFullScreenIcon()
+        }
+    }
+
+    // 是否显示播放按钮
+    function bShowPlayIcon() {
+        if (bRunning) {
+            imagerForStart.opacity = 0
+        } else {
+            imagerForStart.opacity = 0.7
+        }
+    }
 }

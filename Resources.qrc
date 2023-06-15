@@ -19,5 +19,7 @@
         <file>assets/icon/videoSetting.png</file>
         <file>assets/icon/videoMin.png</file>
         <file>assets/icon/videoMax.png</file>
+        <file>assets/icon/captionOn.png</file>
+        <file>assets/icon/captionOff.png</file>
     </qresource>
 </RCC>

@@ -22,10 +22,6 @@ Rectangle {
     property bool bAudioVisable: false
     // 播放速度
     property double videoSpeed: 1
-    // 是否全屏
-    property bool bFullSreen: false
-    // 视频是否播放
-    readonly property bool bRunning: player.playbackState == MediaPlayer.PlayingState
 
     width: parent.width
     height: progressHeight
@@ -273,8 +269,10 @@ Rectangle {
             onClicked: {
                 if(!bRunning){
                     player.play()
+                    bShowPlayIcon()
                 } else {
                     player.pause()
+                    bShowPlayIcon()
                 }
             }
         }
@@ -331,8 +329,8 @@ Rectangle {
             id: videoSpeedButton
             anchors {
                 verticalCenter: parent.verticalCenter
-                left: bulletscreenComponent.right
-                leftMargin: 30
+                right: captionButton.left
+                rightMargin: 20
             }
 
             contentItem: Text {
@@ -384,14 +382,55 @@ Rectangle {
             }
         }
 
+        // 字幕按钮
+        Button {
+            id: captionButton
+            anchors {
+                verticalCenter: parent.verticalCenter
+                right: volumeButton.left
+                rightMargin: 20
+            }
+
+            opacity: 0.8    // 设置透明度
+            // 设置背景为透明
+            background: Rectangle {
+                color: "transparent"
+
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true  // 启用鼠标悬停
+                    propagateComposedEvents: true
+                    onPositionChanged: {
+                        hideTimer.stop()
+                    }
+                }
+            }
+
+            // 图标设置
+            icon.source: bCaptionOn ? "qrc:/assets/icon/captionOn.png" : "qrc:/assets/icon/captionOff.png"
+            icon.height: 35
+            icon.width: 35
+            ToolTip.visible: hovered
+            ToolTip.text: bCaptionOn ? "关闭字幕" : "开启字幕"
+
+            onClicked: {
+                if(bCaptionOn){
+                    bCaptionOn = false
+
+                } else {
+                    bCaptionOn = true
+                }
+            }
+        }
+
         // 音量按钮
         Button {
             id: volumeButton
 
             anchors {
-                verticalCenter: videoSpeedButton.verticalCenter
-                left: videoSpeedButton.right
-                leftMargin: 30
+                verticalCenter: parent.verticalCenter
+                right: settingButton.left
+                rightMargin: 20
             }
 
             opacity: 0.8    // 设置透明度
@@ -453,6 +492,57 @@ Rectangle {
             }
         }
 
+        // 设置按钮
+        Button {
+            id: settingButton
+            anchors {
+                verticalCenter: parent.verticalCenter
+                right: fullScreenButton.left
+                rightMargin: 20
+            }
+
+            opacity: 0.8    // 设置透明度
+            // 设置背景为透明
+            background: Rectangle {
+                color: "transparent"
+
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true  // 启用鼠标悬停
+                    propagateComposedEvents: true
+                    onPositionChanged: {
+                        hideTimer.stop()
+                    }
+
+                    onEntered: {
+                        settingButton.rotation = 0
+                        rotateAnimation.start()
+                    }
+
+                }
+            }
+
+            NumberAnimation {
+                id: rotateAnimation
+                target: settingButton
+                property: "rotation"
+                from: 0
+                to: 180
+                duration: 500
+            }
+
+            // 图标设置
+            icon.source: "qrc:/assets/icon/setting.png"
+            icon.height: 30
+            icon.width: 30
+            ToolTip.visible: hovered
+            ToolTip.text: "设置"
+
+            onClicked: {
+                // 实现设置
+            }
+        }
+
         // 全屏/缩小按钮
         Button {
             id: fullScreenButton
@@ -488,14 +578,12 @@ Rectangle {
             onClicked: {
                 if (bFullSreen === true) {
                     mainWindow.visibility = Window.Windowed
-
                     bFullSreen = false
-                    fullScreenButton.icon.source = "qrc:/assets/icon/videoMax.png"
                 } else {
                     mainWindow.visibility = Window.FullScreen
                     bFullSreen = true
-                    fullScreenButton.icon.source = "qrc:/assets/icon/videoMin.png"
                 }
+                changeFullScreenIcon()
             }
         }
 
@@ -511,6 +599,15 @@ Rectangle {
            position: 1.0
            color: Qt.rgba(0, 0, 0, 0.8)
        }
+    }
+
+    // 更改全屏图标
+    function changeFullScreenIcon() {
+        if (bFullSreen) {
+            fullScreenButton.icon.source = "qrc:/assets/icon/videoMin.png"
+        } else {
+            fullScreenButton.icon.source = "qrc:/assets/icon/videoMax.png"
+        }
     }
 }
 
