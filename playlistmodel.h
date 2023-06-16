@@ -15,7 +15,7 @@ class PlayListItem;
 using Playlist = QList<PlayListItem *>;
 
 
-class PlayListmodel : public QAbstractListModel
+class PlayListModel : public QAbstractListModel
 {
     Q_OBJECT
 
@@ -24,9 +24,11 @@ class PlayListmodel : public QAbstractListModel
     Q_PROPERTY(bool isSibling MEMBER m_isSibling READ getIsSibling WRITE setIsSibling NOTIFY isSiblingChanged)
 
 public:
-    explicit PlayListmodel(QObject *parent = nullptr);
+    explicit PlayListModel(QObject *parent = nullptr);
+    ~PlayListModel();
 
     enum {
+        ItemRole = Qt::UserRole,
         TitleRole,
         PathRole,
         FolderPathRole,
@@ -57,6 +59,8 @@ public:
     //get,set,Changed
     Q_INVOKABLE bool getIsSibling() const;
     Q_INVOKABLE void setIsSibling(bool is);
+
+
 
 
 Q_SIGNALS:

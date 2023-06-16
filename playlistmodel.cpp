@@ -12,11 +12,19 @@
 #include <QDebug>
 #include <QVariant>
 
-PlayListmodel::PlayListmodel(QObject *parent): QAbstractListModel(parent)
+PlayListModel::PlayListModel(QObject *parent): QAbstractListModel(parent)
 {
+    appendItem(QUrl("file:///root/test.mp4"));
+//        updateList();
 }
 
-int PlayListmodel::rowCount(const QModelIndex &parent) const
+PlayListModel::~PlayListModel(){
+    qDeleteAll(m_playlist);
+    m_playlist.clear();
+}
+
+
+int PlayListModel::rowCount(const QModelIndex &parent) const
 {
     if (parent.isValid())
         return 0;
@@ -24,9 +32,10 @@ int PlayListmodel::rowCount(const QModelIndex &parent) const
     return m_playlist.size();
 }
 
-QHash<int, QByteArray> PlayListmodel::roleNames() const
+QHash<int, QByteArray> PlayListModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
+    roles[ItemRole] = "item";
     roles[TitleRole] = "title";
     roles[PathRole] = "path";
     roles[FolderPathRole] = "folderPath";
@@ -34,27 +43,29 @@ QHash<int, QByteArray> PlayListmodel::roleNames() const
     return roles;
 }
 
-QVariant PlayListmodel::data(const QModelIndex &index, int role) const
+QVariant PlayListModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid() || m_playlist.empty())
         return QVariant("");
 
     auto playListItem = m_playlist.at(index.row());
     switch (role) {
+    case ItemRole:
+        return QVariant::fromValue(playListItem);
     case TitleRole:
-        return QVariant(playListItem->fileName());
+        return QVariant::fromValue(playListItem->fileName());
     case PathRole:
-        return QVariant(playListItem->filePath());
+        return QVariant::fromValue(playListItem->filePath());
     case DurationRole:
-        return QVariant(playListItem->duration());
+        return QVariant::fromValue(playListItem->duration());
     case FolderPathRole:
-        return QVariant(playListItem->folderPath());
+        return QVariant::fromValue(playListItem->folderPath());
     }
 
     return QVariant("");
 }
 
-void PlayListmodel::clear()
+void PlayListModel::clear()
 {
     qDeleteAll(m_playlist);
     beginResetModel();
@@ -62,7 +73,7 @@ void PlayListmodel::clear()
     endResetModel();
 }
 
-void PlayListmodel::getSiblingItems(QUrl url)
+void PlayListModel::getSiblingItems(QUrl url)
 {
     clear();
     QFileInfo openedFileInfo(url.toLocalFile());
@@ -107,7 +118,7 @@ void PlayListmodel::getSiblingItems(QUrl url)
     }
 }
 
-QString PlayListmodel::getPath(int index)
+QString PlayListModel::getPath(int index)
 {
     // ensure the requested path is valid
     if (m_playlist.isEmpty()) {
@@ -119,7 +130,7 @@ QString PlayListmodel::getPath(int index)
     return m_playlist[index]->filePath();
 }
 
-void PlayListmodel::removeItem(int index)
+void PlayListModel::removeItem(int index)
 {
     beginRemoveRows(QModelIndex(), index, index);
     m_playlist.removeAt(index);
@@ -127,7 +138,7 @@ void PlayListmodel::removeItem(int index)
     Q_EMIT itemRemoved(index, getPath(index));
 }
 
-void PlayListmodel::appendItem(QUrl url)
+void PlayListModel::appendItem(QUrl url)
 {
     //解析文件
     PlayListItem *item{nullptr};
@@ -157,7 +168,7 @@ void PlayListmodel::appendItem(QUrl url)
 
 }
 
-QMimeType PlayListmodel::mimeTypeCheck(const QUrl url){
+QMimeType PlayListModel::mimeTypeCheck(const QUrl url){
 
     QMimeDatabase db;
     QMimeType mimeType = db.mimeTypeForUrl(url);
@@ -167,7 +178,7 @@ QMimeType PlayListmodel::mimeTypeCheck(const QUrl url){
 }
 
 
-void PlayListmodel::openFile(const QString &path){
+void PlayListModel::openFile(const QString &path){
     QUrl qurl(path);
     QMimeType mimeType = mimeTypeCheck(qurl);
     if(mimeType.name().startsWith("video/")){
@@ -180,13 +191,11 @@ void PlayListmodel::openFile(const QString &path){
     }
 }
 
-
-
-bool  PlayListmodel::getIsSibling() const{
+bool  PlayListModel::getIsSibling() const{
     return m_isSibling;
 }
 
-void PlayListmodel::setIsSibling(bool is)
+void PlayListModel::setIsSibling(bool is)
 {
     m_isSibling = is;
     Q_EMIT isSiblingChanged();

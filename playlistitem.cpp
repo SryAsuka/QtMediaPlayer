@@ -1,35 +1,31 @@
-#define _UNICODE
-
 #include "playlistitem.h"
 
 #include <QFileInfo>
 #include <QUrl>
-#include <MediaInfo/MediaInfo.h>
+#include <QMediaPlayer>
+#include <QMediaMetaData>
 
 
 PlayListItem::PlayListItem(const QString &path, QObject *parent)
-    : QObject(parent)
+    : ListItem(parent)
 {
-    MediaInfoLib::MediaInfo Mi;
-
     QFileInfo fileInfo(path);
+    QMediaPlayer *m_player = new QMediaPlayer(this);
+    QThumbnail th = new QThumbnail(this);
 
-    //必须要加#define _UNICODE 且使用 std::wstring
-    std::wstring spath = path.toStdWString();
-    Mi.Open(spath);
-
+    m_player->setSource(fileInfo.absoluteFilePath());
     //获取数据
     setFileName(fileInfo.fileName());
     setFilePath(fileInfo.absoluteFilePath());
     setFolderPath(fileInfo.absolutePath());
     
-    //使用MediaInfo 传入数据需要以std::wstring格式
-    std::wstring DurationInfo = Mi.Get(MediaInfoLib::stream_t::Stream_Video,0,QString("Duration/String4").toStdWString());
-
     //获取Duration数据
-    setDuration(QString::fromStdWString(DurationInfo));
+    QMediaMetaData mediaData = m_player->metaData();
+    setDuration(mediaData.stringValue(QMediaMetaData::Duration));
 
-    Mi.Close();
+    //获取缩略图数据
+    setThumbtail(th.createThumbnail(fileInfo.filePath(),30));
+
 }
 
 
@@ -73,3 +69,14 @@ void PlayListItem::setDuration(const QString &duration)
 {
     m_duration = duration;
 }
+
+QImage PlayListItem::thumbnail() const
+{
+    return m_thumbnail;
+}
+
+void PlayListItem::setThumbtail(const QImage &image){
+    m_thumbnail = image;
+}
+
+

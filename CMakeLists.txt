@@ -3,7 +3,16 @@ cmake_minimum_required(VERSION 3.26)
 project(QtMediaPlayer VERSION 0.1 LANGUAGES CXX)
 
 find_package(Qt6 6.5 REQUIRED Core COMPONENTS Quick Multimedia)
-
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(LIBAV REQUIRED IMPORTED_TARGET
+    libavdevice
+    libavfilter
+    libavformat
+    libavcodec
+    libswresample
+    libswscale
+    libavutil
+)
 
 qt_standard_project_setup(REQUIRES 6.5)
 
@@ -12,6 +21,9 @@ qt_add_executable(appQtMediaPlayer)
 target_sources(appQtMediaPlayer
     PRIVATE
         main.cpp
+        qthumbnail.h qthumbnail.cpp
+        listitem.h
+
 
     PUBLIC
         
@@ -20,13 +32,13 @@ target_sources(appQtMediaPlayer
 qt_add_qml_module(appQtMediaPlayer
     URI QtMediaPlayer
     VERSION 1.0
+
     SOURCES
-#        videoframe.h videoframe.cpp
     recentfileitem.h recentfileitem.cpp
     recentfilesmodel.h recentfilesmodel.cpp
     playlistmodel.h playlistmodel.cpp
-#    playitem.h playitem.cpp
     playlistitem.h playlistitem.cpp
+    modelimageprovider.h
 
 
     QML_FILES 
@@ -40,14 +52,10 @@ qt_add_qml_module(appQtMediaPlayer
         PlaybackRateControl.qml
 
 )
-#qt_add_qml_module(appVideotest
-#    URI com.videotest.mult
-#    VERSION 1.0
-#        SOURCES
-#            videoframe.h videoframe.cpp
-#)
+
 
 target_compile_features(appQtMediaPlayer PRIVATE cxx_std_20)
+
 
 set_target_properties(appQtMediaPlayer PROPERTIES
     AUTORCC TRUE
@@ -57,34 +65,19 @@ set_target_properties(appQtMediaPlayer PROPERTIES
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
-
 target_link_libraries(appQtMediaPlayer
     PRIVATE 
         Qt6::Quick
-#        Qt6::Multimedia
-        mediainfo
+        Qt6::Multimedia
+        PkgConfig::LIBAV
     )
+
 
 install(TARGETS appQtMediaPlayer
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
-
-
-
-#set(QtMediaPlayer_control_file
-#    "qml/qmlcontrol/PlaybackControl.qml"
-#)
-
-
-#qt_add_resources(qmlcontrol "qmlcontrol"
-#    PREFIX
-#        "/"
-#    FILES
-#        ${qml_control_files}
-#)
-
 
 
 

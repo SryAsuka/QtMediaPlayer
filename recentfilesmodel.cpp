@@ -1,22 +1,30 @@
 #include "recentfilesmodel.h"
 #include "recentfileitem.h"
 
-
 #include <QUrl>
 #include <QVariant>
 #include <QFileInfo>
 #include <QMimeData>
 #include <QMimeDatabase>
 #include <QSettings>
+#include <QImage>
 
 RecentFilesModel::RecentFilesModel(QObject *parent):
-    QAbstractListModel(parent)
+   QAbstractListModel(parent)
 {
 
-    updateRecentList();
-    QSettings setting;
-    qDebug()<<setting.value("recentFiles");
+
+    updateList();
+//    QSettings setting;
+//    qDebug()<<setting.value("recentFiles");
+
 }
+RecentFilesModel::~RecentFilesModel(){
+    qDeleteAll(m_recentList);
+    m_recentList.clear();
+
+}
+
 
 int RecentFilesModel::rowCount(const QModelIndex &parent) const
 {
@@ -29,8 +37,9 @@ int RecentFilesModel::rowCount(const QModelIndex &parent) const
 QHash<int, QByteArray> RecentFilesModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
-    roles[TitleRose] = "title";
-    roles[PathRose] = "path";
+    roles[ItemRole] = "item";
+    roles[TitleRole] = "title";
+    roles[PathRole] = "path";
     return roles;
 }
 
@@ -41,11 +50,14 @@ QVariant RecentFilesModel::data(const QModelIndex &index, int role) const
 
     auto recentFileItem = m_recentList.at(index.row());
     switch (role) {
-    case TitleRose:
-        return QVariant(recentFileItem->fileName());
-    case PathRose:
-        return QVariant(recentFileItem->filePath());
+    case ItemRole:
+        return QVariant::fromValue(recentFileItem);
+    case TitleRole:
+        return QVariant::fromValue(recentFileItem->fileName());
+    case PathRole:
+        return QVariant::fromValue(recentFileItem->filePath());
     }
+
     return QVariant("");
 }
 
@@ -85,14 +97,14 @@ void RecentFilesModel::updateRecent(const QString &path){
         settings.setValue("recentFiles",recentFilePaths);
 
         //update Recent List
-        updateRecentList();
+        updateList();
 
         QSettings setting;
         qDebug()<<setting.value("recentFiles");
     }
 }
 
-void RecentFilesModel::updateRecentList(){
+void RecentFilesModel::updateList(){
 
     QSettings settings;
     QStringList recentFilePaths = settings.value("recentFiles").toStringList();
@@ -126,7 +138,7 @@ void RecentFilesModel::clear()
     QSettings setting;
     setting.clear();
     setting.remove("recentFiles");
-    updateRecentList();
+    updateList();
 }
 
 int RecentFilesModel::getMaxNum() const{
@@ -137,5 +149,7 @@ void RecentFilesModel::setMaxNum(int num){
     m_maxNum = num;
     Q_EMIT maxNumChanged();
 }
+
+
 
 #include "moc_recentfilesmodel.cpp"

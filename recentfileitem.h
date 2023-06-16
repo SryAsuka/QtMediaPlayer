@@ -1,9 +1,11 @@
 #ifndef RECENTFILEITEM_H
 #define RECENTFILEITEM_H
+#include "qthumbnail.h"
+#include "listitem.h"
 
 #include <QObject>
 
-class RecentFileItem :public QObject
+class RecentFileItem :public ListItem
 {
     Q_OBJECT
 
@@ -16,10 +18,17 @@ public:
     Q_INVOKABLE QString fileName() const;
     void setFileName(const QString &fileName);
 
+    Q_INVOKABLE QImage thumbnail() const override;
+
+    void setThumbtail(const QImage &image);
+
+
+
 private:
     QString m_fileName;
     QString m_filePath;
 
+    QImage m_thumbnail;
 
 };
 

@@ -9,6 +9,7 @@
 #include <QMimeData>
 #include <QMimeDatabase>
 
+
 class RecentFileItem;
 
 using RecentList = QList<RecentFileItem *>;
@@ -24,10 +25,12 @@ class RecentFilesModel: public QAbstractListModel
 
 public:
    explicit RecentFilesModel(QObject *parent = nullptr);
+    ~RecentFilesModel();
 
     enum {
-       TitleRose,
-       PathRose,
+        ItemRole = Qt::UserRole,
+        TitleRole,
+        PathRole,
     };
 
     //Listmodel 起手三样式
@@ -41,7 +44,7 @@ public:
 
     //更新QSetting记录,更新对应List
     Q_INVOKABLE void updateRecent(const QString &path);
-    void updateRecentList();
+    void updateList();
 
 
     //MimeType分析函数
@@ -62,6 +65,7 @@ Q_SIGNALS:
 
 private:
 
+//    RecentList m_recentList;
     RecentList m_recentList;
 
     int m_maxNum{5};

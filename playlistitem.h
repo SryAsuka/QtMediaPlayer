@@ -1,9 +1,13 @@
 #ifndef PLAYLISTITEM_H
 #define PLAYLISTITEM_H
+#include "qthumbnail.h"
+#include "listitem.h"
 
 #include <QObject>
+#include <QMediaPlayer>
 
-class PlayListItem: public QObject
+
+class PlayListItem: public ListItem
 {
     Q_OBJECT
 public:
@@ -22,11 +26,19 @@ public:
     Q_INVOKABLE QString duration() const;
     void setDuration(const QString &duration);
 
+    Q_INVOKABLE QImage thumbnail() const override;
+
+    void setThumbtail(const QImage &image) ;
+
 private:
     QString m_fileName;
     QString m_filePath;
     QString m_folderPath;
     QString m_duration;
+
+    QImage m_thumbnail;
+
+
 };
 
 #endif // PLAYLISTITEM_H

@@ -1,16 +1,18 @@
 #include "recentfileitem.h"
 
-
+#include <QImage>
 #include <QFileInfo>
 #include <QUrl>
 
-RecentFileItem::RecentFileItem(const QString &path, QObject *parent) :QObject(parent)
+RecentFileItem::RecentFileItem(const QString &path, QObject *parent) :ListItem(parent)
 {
     QFileInfo fileInfo(path);
+    QThumbnail th = new QThumbnail(this);
 
     //获取数据
     setFileName(fileInfo.fileName());
     setFilePath(fileInfo.filePath());
+    setThumbtail(th.createThumbnail(fileInfo.filePath(),30));
 
 }
 
@@ -33,3 +35,13 @@ void RecentFileItem::setFileName(const QString &fileName)
 {
     m_fileName = fileName;
 }
+
+QImage RecentFileItem::thumbnail() const
+{
+    return m_thumbnail;
+}
+
+void RecentFileItem::setThumbtail(const QImage &image){
+    m_thumbnail = image;
+}
+

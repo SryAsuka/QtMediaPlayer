@@ -22,7 +22,7 @@ Item{
 
     function setFilesModel(file){
 //        modeltest.clear();
-        playlistmode.openFile(file)
+       main_playlist.openFile(file)
 //        console.log(file)
         recentFilesModel.updateRecent(file);
         viewtest.currentIndex = 0;
@@ -100,12 +100,19 @@ Item{
                 Item {
                     width: 360; height: 40
                     Row {
-                        Text{
-                            text: path+" "
-                        }
+//                        Text{
+//                            text: path+" "
+//                        }
 
                         Text{
                             text: title
+                        }
+//                        Text{
+//                            text: thumbnail
+//                        }
+                        Image {
+
+                            source: "image://recent/"+title
                         }
                     }
                     MouseArea{
@@ -134,19 +141,19 @@ Item{
             ListView {
                 id : playListView
                 width: 340; height: 180
-                model: playlistmode
+                model: main_playlist
                 delegate: playlistdelegate
                 highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
 
 
 
-                PlayListmodel{
-                    id:playlistmode
+//                PlayListModel{
+//                    id:playlistmode
 
-                    isSibling: true
+//                    isSibling: false
 
 
-                }
+//                }
             }
 
             Component{
@@ -155,12 +162,12 @@ Item{
                     width: 360; height: 40
 
                     Row {
-                        Text{
-                            text: folderPath+"    "
-                        }
-                        Text{
-                            text :path+"    "
-                        }
+//                        Text{
+//                            text: folderPath+"    "
+//                        }
+//                        Text{
+//                            text :path+"    "
+//                        }
 
                         Text{
                             text: title+"     "
@@ -168,6 +175,10 @@ Item{
 
                         Text{
                             text:duration
+                        }
+                        Image {
+
+                            source: "image://playlist/"+title
                         }
                     }
 
