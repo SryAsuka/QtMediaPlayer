@@ -22,6 +22,8 @@ Rectangle {
     // 是否被收藏
     property bool bCollect: false
 
+    property point point: Qt.point(x,y)
+
     id: videoPlayer
     color: "black"
 
@@ -34,7 +36,7 @@ Rectangle {
     MediaPlayer {
         id: player
         audioOutput: AudioOutput {}
-        source: "file:///run/media/root/坠梦之盘/作品集/视频/成渝大赛-采访.mp4"
+        source: "file:///run/media/root/坠梦之盘/作品集/视频/鬼畜.mp4"
         videoOutput: video
     }
 
@@ -82,6 +84,7 @@ Rectangle {
 
         anchors.centerIn: parent
         color: "transparent"
+
         MouseArea {
             anchors.fill: parent
 
@@ -104,7 +107,6 @@ Rectangle {
                         timer.restart()    //此次点击前没有计时，启动计时
                 }
             }
-
         }
         Image {
             id: imagerForStart
@@ -140,6 +142,8 @@ Rectangle {
                 mouseArea.cursorShape = "ArrowCursor"
                 hideProgressBarTimer.restart();
             }
+
+
 
             Behavior on opacity {  // 添加动画行为
                 OpacityAnimator { duration: 300 }
@@ -189,11 +193,11 @@ Rectangle {
     // 双击事件
     function dblClick() {
         if (bFullSreen === true) {
-            mainWindow.visibility = Window.Windowed
+            window.visibility = Window.Windowed
             bFullSreen = false
             videoControl.changeFullScreenIcon()
         } else {
-            mainWindow.visibility = Window.FullScreen
+            window.visibility = Window.FullScreen
             bFullSreen = true
             videoControl.changeFullScreenIcon()
         }

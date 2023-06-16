@@ -17,12 +17,12 @@ Item {
         id:txt
         anchors.centerIn: background
         text:"My Vedio"
-        font. family: "微软雅黑"
+        font. family: window.mFONT_FAMILY
         font.pointSize: 20
         color:"#ffffff"
     }
 
-    MouseArea {
+    property MouseArea mymouse: MouseArea{
         anchors.fill: parent
         cursorShape: background.enabled?Qt.PointingHandCursor:Qt.ForbiddenCursor
         hoverEnabled: true

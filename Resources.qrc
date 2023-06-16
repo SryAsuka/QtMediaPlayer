@@ -28,5 +28,7 @@
         <file>assets/picture/img3.jpg</file>
         <file>assets/picture/img2.jpg</file>
         <file>assets/picture/img1.jpg</file>
+        <file>assets/icon/exitMax.png</file>
+        <file>assets/icon/about.png</file>
     </qresource>
 </RCC>

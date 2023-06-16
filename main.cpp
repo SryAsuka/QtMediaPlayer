@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     // 设置图标
-    app.setWindowIcon(QIcon("QtMediaPlayer/assets/icon/video.png"));
+    app.setWindowIcon(QIcon(":/assets/icon/video.png"));
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("QtMediaPlayer/qml/Main.qml"));

@@ -3,6 +3,7 @@
  * 功能：视频标题栏，返回按钮，显示标题，收藏按钮
  * 2023.6.14，视频标题栏
  * 2023.6.15下午：添加收藏、返回、文件列表按钮
+ * 2023.6.16下午：增加鼠标移动区域
  */
 import QtQuick
 import QtQuick.Controls
@@ -51,7 +52,7 @@ Rectangle {
         ToolTip.text: "返回"
 
         onClicked: {
-            // 实现返回
+            window.changePageForHome()
         }
     }
 
@@ -76,8 +77,26 @@ Rectangle {
             color: "white"
             font.pixelSize: 22
             font.weight: Font.Thin
-            font.family: "微软雅黑"
+            font.family: window.mFONT_FAMILY
             opacity: 0.8
+        }
+    }
+
+    // 鼠标移动区域
+    Item {
+        anchors {
+            left: videoTitle.right
+            right: collectButton.left
+            top: parent.top
+            bottom: parent.bottom
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            acceptedButtons: Qt.LeftButton
+            onPressed: setPoint(mouseX,mouseY)
+            onMouseXChanged: moveX(mouseX)
+            onMouseYChanged: moveY(mouseY)
         }
     }
 
@@ -171,6 +190,26 @@ Rectangle {
            position: 0.2
            color: Qt.rgba(0, 0, 0, 0.8)
        }
+    }
+
+    // 移动窗口
+    function moveX( mouseX = 0 ) {
+        var x = window.x + mouseX-point.x
+        if(x<-(window.width-70)) x = - (window.width-70)
+        if(x>Screen.desktopAvailableWidth-70) x = Screen.desktopAvailableWidth-70
+        window.x = x
+    }
+
+    function moveY( mouseY = 0 ) {
+        var y = window.y + mouseY-point.y
+        if(y<=0) y = 0
+        if(y>Screen.desktopAvailableHeight-70) y = Screen.desktopAvailableHeight-70
+        window.y = y
+    }
+
+    function setPoint ( mouseX =0 ,mouseY = 0) {
+        point = Qt.point(mouseX,mouseY)
+//        console.log(mouseX,mouseY)
     }
 
 }

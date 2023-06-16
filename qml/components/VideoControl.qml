@@ -596,10 +596,10 @@ Rectangle {
 
             onClicked: {
                 if (bFullSreen === true) {
-                    mainWindow.visibility = Window.Windowed
+                    window.visibility = Window.Windowed
                     bFullSreen = false
                 } else {
-                    mainWindow.visibility = Window.FullScreen
+                    window.visibility = Window.FullScreen
                     bFullSreen = true
                 }
                 changeFullScreenIcon()

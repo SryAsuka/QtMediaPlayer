@@ -116,7 +116,7 @@ Item {
                 text: placeholderText
                 // 设置字体样式
                 font.pixelSize: 18
-                font.family: "微软雅黑"
+                font.family: window.mFONT_FAMILY
                 font.weight: Font.Medium
 
                 color: "#bbbbbb"
