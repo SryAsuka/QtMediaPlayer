@@ -25,8 +25,6 @@
         <file>assets/icon/collectOn.png</file>
         <file>assets/icon/collectOff.png</file>
         <file>assets/icon/fileList.png</file>
-        <file>assets/picture/img3.jpg</file>
-        <file>assets/picture/img2.jpg</file>
-        <file>assets/picture/img1.jpg</file>
+        <file>qml/components/PlayFileList.qml</file>
     </qresource>
 </RCC>
