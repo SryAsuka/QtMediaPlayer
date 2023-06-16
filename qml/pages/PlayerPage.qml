@@ -66,8 +66,13 @@ Rectangle {
         }
     }
 
+    // 加载PlayFileList播放列表组件
+    property PlayFileList playFileList: PlayFileList{
+        id: playFileListComponents
+    }
+
     // 屏幕中间的播放按钮，点击一下视频暂停图标显示，再点击视频播放图标隐藏
-    Rectangle{
+    Rectangle {
         id:starButton
         anchors {
             fill: parent
@@ -77,13 +82,13 @@ Rectangle {
 
         anchors.centerIn: parent
         color: "transparent"
-        MouseArea{
+        MouseArea {
             anchors.fill: parent
 
-            // 避免双击/单击事件同时触发
+            // 避免 双击/单击 事件同时触发
             acceptedButtons: Qt.LeftButton | Qt.RightButton
             property alias oneClickThreshold : timer.interval
-            Timer{
+            Timer {
                 id:timer
                 interval: 200
                 onTriggered: singleClick()   //计时超时，触发单击事件
@@ -131,15 +136,17 @@ Rectangle {
             onPositionChanged: {
                 videoControl.opacity = 1;  // 修改透明度为1
                 videoTitleBar.opacity = 1;
+                // 鼠标光标正常
+                mouseArea.cursorShape = "ArrowCursor"
                 hideProgressBarTimer.restart();
-            }      
+            }
 
             Behavior on opacity {  // 添加动画行为
                 OpacityAnimator { duration: 300 }
             }
         }
 
-        // 隐藏进度条的计时器
+        // 隐藏进度条的计时器，隐藏鼠标计时器
         property Timer hideTimer: Timer {
             id: hideProgressBarTimer
             interval: 1000  // 1s后自动隐藏
@@ -148,6 +155,8 @@ Rectangle {
             onTriggered: {
                 videoControl.opacity = 0;  // 修改透明度为0，即完全透明
                 videoTitleBar.opacity = 0;
+                // 鼠标光标为空
+                mouseArea.cursorShape = "BlankCursor"
             }
         }
     }

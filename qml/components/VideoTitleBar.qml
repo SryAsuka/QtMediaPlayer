@@ -154,10 +154,10 @@ Rectangle {
         icon.height: 30
         icon.width: 30
         ToolTip.visible: hovered
-        ToolTip.text: "文件列表"
+        ToolTip.text: "播放列表"
 
         onClicked: {
-            // 实现文件列表打开
+            videoPlayer.playFileList.open()
         }
     }
 
