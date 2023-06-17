@@ -2,7 +2,17 @@ cmake_minimum_required(VERSION 3.26)
 
 project(QtMediaPlayer VERSION 0.1 LANGUAGES CXX)
 
+# 配置通用编译
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+if(APPLE)
+    set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64" CACHE STRING "" FORCE)
+endif()
+
+#添加所需的包
+#Qt
 find_package(Qt6 6.5 REQUIRED Core COMPONENTS Quick Multimedia)
+#FFmpeg
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIBAV REQUIRED IMPORTED_TARGET
     libavdevice
@@ -18,44 +28,57 @@ qt_standard_project_setup(REQUIRES 6.5)
 
 qt_add_executable(appQtMediaPlayer)
 
-target_sources(appQtMediaPlayer
-    PRIVATE
-        main.cpp
-        qthumbnail.h qthumbnail.cpp
-        listitem.h
+# 设置版本号
+add_definitions(-DVERSION=1,0,6,0)
 
+# 获取文件路径分隔符（解决执行命令的时候有些平台会报错）
+file(TO_CMAKE_PATH "/" PATH_SEPARATOR)
+
+# 遍历所有cpp文件
+file(GLOB_RECURSE CPP_PATHS *.cpp *.h)
+foreach(filepath ${CPP_PATHS})
+    string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/" "" filename ${filepath})
+    list(APPEND src_files ${filename})
+endforeach(filepath)
+
+# 遍历所有qml文件
+file(GLOB_RECURSE QML_PATHS *.qml )
+foreach(filepath ${QML_PATHS})
+    string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/" "" filename ${filepath})
+    list(APPEND qml_files ${filename})
+endforeach(filepath)
+
+
+target_sources(appQtMediaPlayer
+
+    PRIVATE
+
+        ${src_files}
+        Resources.qrc
 
     PUBLIC
-        
 )
 
-qt_add_qml_module(appQtMediaPlayer
-    URI QtMediaPlayer
+
+# 添加qml模块
+qt_add_qml_module(appQtMediaPlayer  # 这里为项目名
+    URI QtMediaPlayer   # 项目名去掉前缀app
     VERSION 1.0
 
-    SOURCES
-    recentfileitem.h recentfileitem.cpp
-    recentfilesmodel.h recentfilesmodel.cpp
-    playlistmodel.h playlistmodel.cpp
-    playlistitem.h playlistitem.cpp
-    modelimageprovider.h
+    QML_FILES
+        ${qml_files}
 
-
-    QML_FILES 
-        Window.qml
-        Content.qml
-        Actions.qml
-        Dialogs.qml
-        PlaybackControl.qml
-        PlaybackSeekControl.qml
-        AudioControl.qml
-        PlaybackRateControl.qml
 
 )
 
+# 遍历所有资源文件
+#file(GLOB_RECURSE RES_PATHS *.png *.jpg *.svg *.ico *.ttf *.webp qmldir)
+#foreach(filepath ${RES_PATHS})
+#    string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/" "" filename ${filepath})
+#    list(APPEND resource_files ${filename})
+#endforeach(filepath)
 
 target_compile_features(appQtMediaPlayer PRIVATE cxx_std_20)
-
 
 set_target_properties(appQtMediaPlayer PROPERTIES
     AUTORCC TRUE
@@ -65,97 +88,17 @@ set_target_properties(appQtMediaPlayer PROPERTIES
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
+
+# 链接库
 target_link_libraries(appQtMediaPlayer
-    PRIVATE 
+    PRIVATE
         Qt6::Quick
         Qt6::Multimedia
         PkgConfig::LIBAV
-    )
-
+)
 
 install(TARGETS appQtMediaPlayer
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#qt_add_executable(QtMediaPlayer)  //Creates and finalizes an application target of a platform-specific type.
-#This command performs the following tasks:
-#    1. Create a CMake target of the appropriate type for the target platform.
-#    2. Link the target to the Qt::Core library.
-#    3. Handle finalization of the CMake target.
-
-
-
-# qt_standard_project_setup()     #set(CMAKE_AUTOUIC ON)  set(CMAKE_AUTOMOC ON)
-
-# @if %{HasTranslation}
-# find_package(Qt6 REQUIRED COMPONENTS Core Quick LinguistTools)
-# @else
-# find_package(Qt6 REQUIRED COMPONENTS Core Quick)
-# @endif
-
-# target_sources(appQtMediaPlayer
-#     PRIVATE
-#         main.cpp
-#         qml.qrc
-#     @if %{HasTranslation}
-#         %{TsFileName}
-#     @endif
-#         
-#     PUBLIC
-#         
-# )
-
-# qt_import_qml_plugins(QtMediaPlayer)
