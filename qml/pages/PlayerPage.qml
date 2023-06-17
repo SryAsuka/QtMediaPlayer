@@ -24,6 +24,8 @@ Rectangle {
 
     property point point: Qt.point(x,y)
 
+    property PlayFileList playFileList: playFileListComponents
+
     id: videoPlayer
     color: "black"
 
@@ -36,14 +38,16 @@ Rectangle {
     MediaPlayer {
         id: player
         audioOutput: AudioOutput {}
-        source: "file:///run/media/root/坠梦之盘/作品集/视频/鬼畜.mp4"
+        source: "/root/tmp/Three.Little.Pigs.1933.avi"
         videoOutput: video
     }
 
-    // 加载VideoControl视频控制组件
+    //Fan: 加载VideoControl视频控制组件
+    //Li:  进度条控制部分
     VideoControl {
         id: videoControl
         anchors.bottom: parent.bottom
+        anchors.top: playFileListComponents.Bottom
 
         player: player
         hideTimer: starButton.hideTimer
@@ -68,8 +72,9 @@ Rectangle {
         }
     }
 
-    // 加载PlayFileList播放列表组件
-    property PlayFileList playFileList: PlayFileList{
+    //Fan: 加载PlayFileList播放列表组件
+    //Li:  从AbstractListModel中获取数据
+    PlayFileList{
         id: playFileListComponents
     }
 

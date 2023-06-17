@@ -9,14 +9,24 @@ if(APPLE)
     set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64" CACHE STRING "" FORCE)
 endif()
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Quick)
+#添加所需的包
+#Qt
+find_package(Qt6 6.5 REQUIRED Core COMPONENTS Quick Multimedia)
+#FFmpeg
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(LIBAV REQUIRED IMPORTED_TARGET
+    libavdevice
+    libavfilter
+    libavformat
+    libavcodec
+    libswresample
+    libswscale
+    libavutil
+)
 
 qt_standard_project_setup(REQUIRES 6.5)
 
-qt_add_executable(appQtMediaPlayer
-    main.cpp
-    Resources.qrc
-)
+qt_add_executable(appQtMediaPlayer)
 
 # 设置版本号
 add_definitions(-DVERSION=1,0,6,0)
@@ -25,18 +35,41 @@ add_definitions(-DVERSION=1,0,6,0)
 file(TO_CMAKE_PATH "/" PATH_SEPARATOR)
 
 # 遍历所有cpp文件
-file(GLOB_RECURSE CPP_FILES *.cpp *.h)
-foreach(filepath ${CPP_FILES})
+file(GLOB_RECURSE CPP_PATHS *.cpp *.h)
+foreach(filepath ${CPP_PATHS})
     string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/" "" filename ${filepath})
-    list(APPEND sources_files ${filename})
+    list(APPEND src_files ${filename})
 endforeach(filepath)
 
 # 遍历所有qml文件
-file(GLOB_RECURSE QML_PATHS *.qml)
+file(GLOB_RECURSE QML_PATHS *.qml )
 foreach(filepath ${QML_PATHS})
     string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/" "" filename ${filepath})
     list(APPEND qml_files ${filename})
 endforeach(filepath)
+
+
+target_sources(appQtMediaPlayer
+
+    PRIVATE
+
+        ${src_files}
+        Resources.qrc
+
+    PUBLIC
+)
+
+
+# 添加qml模块
+qt_add_qml_module(appQtMediaPlayer  # 这里为项目名
+    URI QtMediaPlayer   # 项目名去掉前缀app
+    VERSION 1.0
+
+    QML_FILES
+        ${qml_files}
+
+
+)
 
 # 遍历所有资源文件
 #file(GLOB_RECURSE RES_PATHS *.png *.jpg *.svg *.ico *.ttf *.webp qmldir)
@@ -44,14 +77,6 @@ endforeach(filepath)
 #    string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/" "" filename ${filepath})
 #    list(APPEND resource_files ${filename})
 #endforeach(filepath)
-
-# 添加qml模块
-qt_add_qml_module(appQtMediaPlayer  # 这里为项目名
-    URI QtMediaPlayer   # 项目名去掉前缀app
-    VERSION 1.0
-    QML_FILES ${qml_files}
-    RESOURCES ${resource_files}
-)
 
 target_compile_features(appQtMediaPlayer PRIVATE cxx_std_20)
 
@@ -68,6 +93,8 @@ set_target_properties(appQtMediaPlayer PROPERTIES
 target_link_libraries(appQtMediaPlayer
     PRIVATE
         Qt6::Quick
+        Qt6::Multimedia
+        PkgConfig::LIBAV
 )
 
 install(TARGETS appQtMediaPlayer

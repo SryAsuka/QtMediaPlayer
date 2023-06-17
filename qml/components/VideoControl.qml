@@ -14,6 +14,7 @@ import "../pages"
 // 视频控制区域
 Rectangle {
     id: videoControl
+//    z:100
     property int progressHeight: 120
     property MediaPlayer player
     property Timer hideTimer

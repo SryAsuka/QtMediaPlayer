@@ -15,6 +15,7 @@ Rectangle {
     id: videoTitleItem
     property int videoTitleHeight: 80
     property Timer hideTimer
+//    z:100
 
     width: parent.width
     height: videoTitleHeight

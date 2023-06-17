@@ -10,6 +10,8 @@ import QtQuick.Layouts
 import "components"
 import "pages"
 
+
+
 ApplicationWindow {
     id: window
 
