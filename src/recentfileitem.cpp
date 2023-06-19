@@ -1,18 +1,31 @@
 #include "recentfileitem.h"
+#include <string>
 
 #include <QImage>
 #include <QFileInfo>
 #include <QUrl>
+#include <QString>
 
 RecentFileItem::RecentFileItem(const QString &path, QObject *parent) :ListItem(parent)
 {
     QFileInfo fileInfo(path);
     QThumbnail th = new QThumbnail(this);
 
-    //获取数据
-    setFileName(fileInfo.fileName());
-    setFilePath(fileInfo.filePath());
-    setThumbtail(th.createThumbnail(fileInfo.filePath(),30));
+    if(fileInfo.exists()){
+        //获取数据
+        setFileName(fileInfo.fileName());
+        setFilePath(fileInfo.filePath());
+        qDebug()<<fileInfo.filePath();
+        setThumbtail(th.createThumbnail(fileInfo.filePath(),40));
+
+    }else{
+        //return no_video
+        std::string cPath = path.toStdString();
+        std::string cName = cPath.substr(cPath.find_last_of("/")+1);
+        setFileName(QString::fromStdString(cName));
+        setFilePath("null");
+        setThumbtail(QImage(":/assets/picture/no_video.png"));
+    }
 
 }
 

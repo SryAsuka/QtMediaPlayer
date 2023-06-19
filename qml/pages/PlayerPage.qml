@@ -13,6 +13,7 @@ Rectangle {
 
     property alias video: video
     property alias player: player
+
     // 是否全屏
     property bool bFullSreen: false
     // 视频是否播放
@@ -38,7 +39,6 @@ Rectangle {
     MediaPlayer {
         id: player
         audioOutput: AudioOutput {}
-        source: "/root/tmp/Three.Little.Pigs.1933.avi"
         videoOutput: video
     }
 
@@ -47,7 +47,6 @@ Rectangle {
     VideoControl {
         id: videoControl
         anchors.bottom: parent.bottom
-        anchors.top: playFileListComponents.Bottom
 
         player: player
         hideTimer: starButton.hideTimer

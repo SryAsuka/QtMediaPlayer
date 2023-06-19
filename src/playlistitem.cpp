@@ -29,7 +29,7 @@ PlayListItem::PlayListItem(const QString &path, QObject *parent)
     setDuration(mediaData.stringValue(QMediaMetaData::Duration));
 
     //获取缩略图数据
-    setThumbtail(th.createThumbnail(fileInfo.filePath(),80));
+    setThumbtail(th.createThumbnail(fileInfo.filePath(),150));
 }
 
 

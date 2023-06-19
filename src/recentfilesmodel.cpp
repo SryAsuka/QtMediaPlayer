@@ -18,13 +18,10 @@ RecentFilesModel::RecentFilesModel(QObject *parent):
    QAbstractListModel(parent)
 {
 
-
-    //importantly needed to modify
-    //fatal bug
-    clear();
     updateList();
-//    QSettings setting;
-//    qDebug()<<setting.value("recentFiles");
+    QSettings setting;
+    qDebug()<<"test";
+    qDebug()<<setting.value("recentFiles");
 
 }
 RecentFilesModel::~RecentFilesModel(){

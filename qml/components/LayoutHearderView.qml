@@ -141,7 +141,7 @@ Rectangle {
             rightMargin: 40
         }
 
-        icon.source: "qrc:/assets/icon/systemSetting.png"
+        icon.source: "qrc:/assets/icon/SystemSetting.png"
         toolTip: "Setting"
         onClicked: {
             // 切换设置窗口
