@@ -44,6 +44,39 @@ Rectangle {
         onMouseYChanged: moveY(mouseY)
     }
 
+    // 鼠标缩放区域
+    Rectangle {
+        id: topRightCorner
+        width: 10
+        height: 10
+        anchors.top: parent.top
+        anchors.right: parent.right
+        color: "transparent"
+
+        MouseArea {
+            id: resizeMouseArea
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.SizeBDiagCursor
+
+            property real startX: 0
+            property real startY: 0
+
+            onPressed: {
+                startX = mouse.x
+                startY = mouse.y
+            }
+
+            onPositionChanged: {
+                if (resizeMouseArea.pressed) {
+                    window.width += mouse.x - startX;
+                    window.height -= mouse.y - startY;
+                    window.y += mouse.y - startY;
+                }
+            }
+        }
+    }
+
     // 首页按钮
     HomeToolButton {
         id: homePageButton
@@ -88,14 +121,30 @@ Rectangle {
     HomeToolButton {
         anchors {
             verticalCenter: parent.verticalCenter
-            right: min.left
-            rightMargin: 20
+            right: setting.left
+            rightMargin: 30
         }
 
         icon.source: "qrc:/assets/icon/about.png"
         toolTip: "About"
         onClicked: {
             window.changePageForAbout()
+        }
+    }
+
+    // 设置按钮
+    HomeToolButton {
+        id: setting
+        anchors {
+            verticalCenter: parent.verticalCenter
+            right: min.left
+            rightMargin: 40
+        }
+
+        icon.source: "qrc:/assets/icon/systemSetting.png"
+        toolTip: "Setting"
+        onClicked: {
+            // 切换设置窗口
         }
     }
 

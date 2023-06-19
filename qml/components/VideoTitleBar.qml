@@ -20,6 +20,40 @@ Rectangle {
     width: parent.width
     height: videoTitleHeight
 
+    // 鼠标缩放区域
+    Rectangle {
+        id: topRightCorner
+        width: 10
+        height: 10
+        anchors.top: parent.top
+        anchors.right: parent.right
+        color: "transparent"
+
+        MouseArea {
+            id: resizeMouseArea
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.SizeBDiagCursor
+
+            property real startX: 0
+            property real startY: 0
+            property int resizeMargin: 10
+
+            onPressed: {
+                startX = mouse.x
+                startY = mouse.y
+            }
+
+            onPositionChanged: {
+                if (resizeMouseArea.pressed) {
+                    window.width += mouse.x - startX;
+                    window.height -= mouse.y - startY;
+                    window.y += mouse.y - startY;
+                }
+            }
+        }
+    }
+
     // 返回按钮
     Button {
         id: returnButton

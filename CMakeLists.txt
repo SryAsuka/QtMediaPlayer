@@ -29,7 +29,7 @@ qt_standard_project_setup(REQUIRES 6.5)
 qt_add_executable(appQtMediaPlayer)
 
 # 设置版本号
-add_definitions(-DVERSION=1,0,6,0)
+add_definitions(-DVERSION=1,0,9,0)
 
 # 获取文件路径分隔符（解决执行命令的时候有些平台会报错）
 file(TO_CMAKE_PATH "/" PATH_SEPARATOR)

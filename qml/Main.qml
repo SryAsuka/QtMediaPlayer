@@ -10,8 +10,6 @@ import QtQuick.Layouts
 import "components"
 import "pages"
 
-
-
 ApplicationWindow {
     id: window
 
@@ -30,7 +28,7 @@ ApplicationWindow {
 
     visible: true
     color: "#00000000"
-    title: qsTr("Media Player")     
+    title: qsTr("Media Player")
 
     Component {
         id: homePage
@@ -54,9 +52,9 @@ ApplicationWindow {
         initialItem: homePage
     }
 
-    function changePageForHome() { stackView.push( homePage ) }
+    function changePageForHome() { stackView.replace( homePage ) }
 
-    function changePageForPlayer() { stackView.push( playerPage ) }
+    function changePageForPlayer() { stackView.replace( playerPage ) }
 
-    function changePageForAbout() { stackView.push( stackView ) }
+    function changePageForAbout() { stackView.replace( stackView ) }
 }
