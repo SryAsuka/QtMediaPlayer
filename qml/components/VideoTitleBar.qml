@@ -106,7 +106,7 @@ Rectangle {
 
         Text {
             id: videoTitleText
-            text: "视频标题"
+            text: ""
             font.bold: true
             anchors {
                 verticalCenter: parent.verticalCenter

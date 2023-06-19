@@ -5,6 +5,7 @@
 #include "src/modelimageprovider.h"
 #include "src/recentfilesmodel.h"
 #include "src/playlistmodel.h"
+#include "src/bulletxml.h"
 
 int main(int argc, char *argv[])
 {
@@ -26,6 +27,9 @@ int main(int argc, char *argv[])
         }, Qt::QueuedConnection);
 
 
+    BulletXml bulletxml;
+
+    engine.rootContext()->setContextProperty("bulletxml", &bulletxml);
 
     engine.rootContext()->setContextProperty("mainPlaylist", playlist);
     engine.addImageProvider("playlistTh",playthumnail);

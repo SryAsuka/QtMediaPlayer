@@ -11,6 +11,8 @@ import QtQuick.Window
 Rectangle {
     property point point: Qt.point(x,y)
     property bool isSmallWindow: false
+    property color homePageButtonColor: globalButtonColor
+    property color settingButtonColor: "#333333"
 
     anchors {
         left: parent.left
@@ -19,7 +21,7 @@ Rectangle {
 
     height: 70
 
-    color: "#eeeeee"
+    color: globalPageColor
 
     // 图标展示
     Image {
@@ -88,11 +90,15 @@ Rectangle {
 
         contentItem: Text {
             text: "Home"
-            color: "#1195db"
+            color: homePageButtonColor
             font.pixelSize: 18
             font.weight: Font.Bold
         }
         toolTip: "Home"
+
+        onClicked: {
+            window.changePageForHome()
+        }
     }
 
     // 播放按钮
@@ -117,7 +123,7 @@ Rectangle {
         }
     }
 
-    // 关于
+    // 导入文件按钮
     HomeToolButton {
         anchors {
             verticalCenter: parent.verticalCenter
@@ -125,10 +131,10 @@ Rectangle {
             rightMargin: 30
         }
 
-        icon.source: "qrc:/assets/icon/about.png"
-        toolTip: "About"
+        icon.source: "qrc:/assets/icon/import.png"
+        toolTip: "Import"
         onClicked: {
-            window.changePageForAbout()
+            // 实现导入文件夹
         }
     }
 
@@ -137,14 +143,32 @@ Rectangle {
         id: setting
         anchors {
             verticalCenter: parent.verticalCenter
+            right: about.left
+            rightMargin: 30
+        }
+
+        icon.source: "qrc:/assets/icon/systemSetting.png"
+        icon.color: settingButtonColor
+        toolTip: "Setting"
+        onClicked: {
+            // 切换设置窗口
+            window.changePageForSetting()
+        }
+    }
+
+    // 关于
+    HomeToolButton {
+        id: about
+        anchors {
+            verticalCenter: parent.verticalCenter
             right: min.left
             rightMargin: 40
         }
 
-        icon.source: "qrc:/assets/icon/SystemSetting.png"
-        toolTip: "Setting"
+        icon.source: "qrc:/assets/icon/about.png"
+        toolTip: "About"
         onClicked: {
-            // 切换设置窗口
+            window.changePageForAbout()
         }
     }
 
@@ -166,7 +190,7 @@ Rectangle {
 
     // 退出全屏
     HomeToolButton {
-        id:resize
+        id: resize
         anchors {
             verticalCenter: parent.verticalCenter
             right: colseButton.left
@@ -186,7 +210,7 @@ Rectangle {
 
     // 全屏按钮
     HomeToolButton {
-        id:maxWindow
+        id: maxWindow
         anchors {
             verticalCenter: parent.verticalCenter
             right: colseButton.left
