@@ -2,8 +2,8 @@
  * 作者：范榆康
  * 日期：2023.6.16
  * 播放列表弹窗
- */
-/*  To open the play list
+ *
+ *  To open the play list
  *  Author: SryAsuka
  *  Data: 2023.6
 **/
@@ -19,7 +19,7 @@ import QtQuick.Layouts
 
 Drawer {
     id: drawer
-    width: parent.width / 3
+    width: 420
     height: parent.height - 150
 
     topMargin: 60
@@ -32,6 +32,8 @@ Drawer {
     }
 
     property alias dListView: listView
+
+
 
 
 
@@ -50,7 +52,8 @@ Drawer {
 
             id: listView
             anchors.fill: parent
-//            spacing: 1
+
+
 
             model: mainPlaylist
             delegate: playlistdelegate
@@ -60,7 +63,6 @@ Drawer {
                 radius: 5
                 opacity: 1
             }
-//            highlightFollowsCurrentItem: false
             highlightMoveDuration: 100
             highlightMoveVelocity: -1
 
@@ -70,7 +72,7 @@ Drawer {
             id:playlistdelegate
 
             PlayListItem{
-                id: playlist
+                id: playListItem
 
                 MouseArea{
                     id:mouseArea
@@ -78,7 +80,13 @@ Drawer {
 
                     onClicked: {
                         listView.currentIndex = index
-
+                    }
+                    onDoubleClicked:{
+                        videoPlayer.player.source = "file://"+path
+//                        videoPlayer.player
+                        videoPlayer.player.play()
+                        bShowPlayIcon()
+                        videoTitleBar.dVideoTitle.text = title
                     }
                 }
             }

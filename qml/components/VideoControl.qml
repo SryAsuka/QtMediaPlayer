@@ -229,10 +229,10 @@ Rectangle {
             icon.height: 25
             icon.width: 25
             ToolTip.visible: hovered
-            ToolTip.text: "上一个"
+            ToolTip.text: "后退"
 
             onClicked: {
-                // 实现上一个
+                player.position -= 3000
             }
         }
 
@@ -308,10 +308,10 @@ Rectangle {
             icon.height: 25
             icon.width: 25
             ToolTip.visible: hovered
-            ToolTip.text: "下一个"
+            ToolTip.text: "快进"
 
             onClicked: {
-                // 实现下一个
+                player.position += 3000
             }
         }
 
@@ -365,21 +365,22 @@ Rectangle {
             ToolTip.text: qsTr("播放速度")
             onClicked: {
                 if(videoSpeed == 1){
+                    videoSpeed  = 1.5
+                    videoSpeedText.text = "x1.5"
+                }
+                else if(videoSpeed  == 1.5){
                     videoSpeed  = 2
                     videoSpeedText.text = "x2"
                 }
                 else if(videoSpeed  == 2){
-                    videoSpeed  = 4
-                    videoSpeedText.text = "x4"
+                    videoSpeed  = 2.5
+                    videoSpeedText.text = "x2.5"
                 }
-                else if(videoSpeed  == 4){
-                    videoSpeed  = 8
-                    videoSpeedText.text = "x8"
-                }
-                else if(videoSpeed  == 8){
+                else if(videoSpeed  == 2.5){
                     videoSpeed  = 1
                     videoSpeedText.text = "x1"
                 }
+                player.setPlaybackRate(videoSpeed)
             }
         }
 
@@ -445,6 +446,7 @@ Rectangle {
                     hoverEnabled: true  // 启用鼠标悬停
                     propagateComposedEvents: true
                     onPositionChanged: {
+                        videoPlayer.playFileList.close()
                         hideTimer.stop()
                         hideVolumeTimer.stop()
                         bAudioVisable = true

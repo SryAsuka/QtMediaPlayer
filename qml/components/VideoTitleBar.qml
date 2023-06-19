@@ -15,7 +15,8 @@ Rectangle {
     id: videoTitleItem
     property int videoTitleHeight: 80
     property Timer hideTimer
-//    z:100
+
+    property alias dVideoTitle: videoTitleText
 
     width: parent.width
     height: videoTitleHeight
@@ -88,6 +89,8 @@ Rectangle {
 
         onClicked: {
             window.changePageForHome()
+            videoPlayer.playFileList.close()
+
         }
     }
 
@@ -104,6 +107,7 @@ Rectangle {
         Text {
             id: videoTitleText
             text: "视频标题"
+            font.bold: true
             anchors {
                 verticalCenter: parent.verticalCenter
                 left: parent.left
@@ -170,6 +174,7 @@ Rectangle {
         onClicked: {
             // 实现收藏
 
+            videoPlayer.playFileList.close()
             if (bCollect) {
                 bCollect = false
             } else {
@@ -211,7 +216,12 @@ Rectangle {
         ToolTip.text: "播放列表"
 
         onClicked: {
-            videoPlayer.playFileList.open()
+            if( !videoPlayer.playFileList.opened){
+                videoPlayer.playFileList.open()
+            }else{
+                videoPlayer.playFileList.close()
+            }
+
         }
     }
 

@@ -34,7 +34,7 @@ QImage QThumbnail::createThumbnail(const QString &path,int width){
     int errCode = avformat_open_input(&fmt_ctx_, cPath, nullptr, nullptr);
     if(errCode != 0){
         qDebug() << "open file fail" << errCode;
-        exit(1);
+        return QImage();
     }
 
     //read video stream
@@ -42,7 +42,7 @@ QImage QThumbnail::createThumbnail(const QString &path,int width){
     if(errCode != 0){
         qDebug() << "avformat_find_stream_info fail" << errCode;
         avformat_close_input(&fmt_ctx_);
-        exit(1);
+        return QImage();
     }
 
     //test video meta info
@@ -52,6 +52,9 @@ QImage QThumbnail::createThumbnail(const QString &path,int width){
     AVPacket* pkt = av_packet_alloc();
     AVFrame* temp_frame = av_frame_alloc();
     SwsContext* sws_ctx = nullptr;
+    //set thumnail to 3/10 video
+    int VDuration = static_cast<int>(fmt_ctx_->duration / AV_TIME_BASE) * 3 / 10;
+    qint64 timestamp = AV_TIME_BASE * static_cast<qint64>(VDuration);
 //    int64_t timestamp = targetTime * AV_TIME_BASE;
     int ret = 0;
 
@@ -73,6 +76,14 @@ QImage QThumbnail::createThumbnail(const QString &path,int width){
             avcodec_open2(codec_ctx, codec, nullptr);
 
             //find frame
+            //seek the video to 1/5
+            int ret = av_seek_frame(fmt_ctx_, -1, timestamp, 0);
+            if (ret >= 0) {
+                avcodec_flush_buffers(codec_ctx);
+            } else {
+                qDebug() << "Seeking in video failed";
+                return QImage();
+            }
             while (av_read_frame(fmt_ctx_, pkt) >= 0){
                 if (pkt->stream_index == videoStream) {
 

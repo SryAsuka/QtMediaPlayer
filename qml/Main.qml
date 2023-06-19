@@ -8,7 +8,7 @@ import QtQuick.Controls
 import QtQuick.Particles
 import QtQuick.Layouts
 import "components"
-import "pages"
+import "./pages"
 
 ApplicationWindow {
     id: window
@@ -52,7 +52,9 @@ ApplicationWindow {
         initialItem: homePage
     }
 
+
     function changePageForHome() { stackView.replace( homePage ) }
+
 
     function changePageForPlayer() { stackView.replace( playerPage ) }
 
