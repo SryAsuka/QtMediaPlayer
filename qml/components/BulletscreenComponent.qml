@@ -5,6 +5,7 @@
  */
 import QtQuick
 import QtQuick.Controls
+import QtQml.XmlListModel
 
 Item {
     property Timer hideTimer
@@ -43,6 +44,7 @@ Item {
 
             // 图标设置
             icon.source: bBullet ? "qrc:/assets/icon/bulletOn.png" : "qrc:/assets/icon/bulletOff.png"
+            icon.color: bBullet ? globalButtonColor : "#f3f3f3"
             icon.height: 30
             icon.width: 30
             ToolTip.visible: hovered
@@ -172,13 +174,13 @@ Item {
 
             onClicked: {
                 if (bulletInput.text !== "") {
-                    console.log("Bullet: " + bulletInput.text);
+                    sendDanmu()
                     bulletInput.text = "";
                 }
             }
 
             background: Rectangle {
-                color: "#1195db"
+                color: globalButtonColor
 
                 MouseArea {
                     anchors.fill: parent
@@ -193,4 +195,25 @@ Item {
         }
     }
 
+    function sendDanmu() {
+
+        var timestamp
+        var millseconds = player.position
+        var minutes = Math.floor(millseconds / 60000)
+        millseconds -= minutes * 60000
+        var seconds = millseconds / 1000
+        seconds = Math.round(seconds)
+        // 返回 mm : ss 格式时间
+        if(minutes < 10 & seconds < 10)
+            timestamp =  "0" + minutes + ":0" + seconds
+        else if(minutes >= 10 & seconds < 10)
+            timestamp =  minutes + ":0" + seconds
+        else if(minutes < 10 & seconds >= 10)
+            timestamp =  "0" + minutes + ":" + seconds
+        else    timestamp =  minutes + ":" + seconds
+
+        bulletxml.saveDanmu(timestamp, bulletInput.text)
+        // Add danmu to the ListView
+        //videoPlayer.danmuModel.append({"content": content, "fontsize": 20, "color": "white"});
+    }
 }

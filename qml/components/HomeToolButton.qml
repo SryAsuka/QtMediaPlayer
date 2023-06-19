@@ -26,7 +26,7 @@ Button {
     }
 
     background: Rectangle {
-        color: self.down || (isCheckable && self.checked) ? "#eeeeee" : "#00000000"
+        color: self.down || (isCheckable && self.checked) ? Qt.rgba(globalPageColor.r + 0.1, globalPageColor.g + 0.1, globalPageColor.b + 0.1, globalPageColor.a) : "#00000000"
     }
     icon.color: self.down || (isCheckable && self.checked) ? "#000000" : "#333333"
 

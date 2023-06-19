@@ -169,6 +169,26 @@ Rectangle {
         }
     }
 
+    // 弹幕显示区域
+    Rectangle{
+        id : bullet
+        height: 30
+        y: 200
+//        property alias textstr: roottext.text
+//        Text {
+//            id : roottext
+//            color: Qt.rgba(Math.random()+0.1,Math.random()+0.05,Math.random(),1);
+//            font.pointSize: 15
+//        }
+        NumberAnimation on x{
+            from : 0
+            to : window.width
+            duration:5000
+            onStopped: bullet.destroy(1)
+        }
+
+    }
+
     // 播放开始
     function videoPlay() {
         player.play();

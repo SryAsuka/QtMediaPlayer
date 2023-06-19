@@ -32,7 +32,7 @@ Drawer {
     }
 
     property alias dListView: listView
-
+    property string filepath: ""
 
 
 
@@ -74,6 +74,7 @@ Drawer {
             PlayListItem{
                 id: playListItem
 
+
                 MouseArea{
                     id:mouseArea
                     anchors.fill: parent
@@ -81,8 +82,13 @@ Drawer {
                     onClicked: {
                         listView.currentIndex = index
                     }
-                    onDoubleClicked:{
-                        videoPlayer.player.source = "file://"+path
+                    onDoubleClicked: {                       
+                        videoPlayer.player.source = "file://" + path
+
+                        // 初始化弹幕
+                        filepath = path
+                        bulletxml.initDanmu(filepath.replace(new RegExp(title + '$'), ''), title)
+
 //                        videoPlayer.player
                         videoPlayer.player.play()
                         bShowPlayIcon()

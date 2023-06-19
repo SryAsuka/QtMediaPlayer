@@ -77,7 +77,7 @@ Rectangle {
                     radius: 2
 
                     // 进度条已经走完的颜色
-                    color: "#7795ee"
+                    color: globalButtonColor
                 }
             }
 
@@ -410,6 +410,7 @@ Rectangle {
 
             // 图标设置
             icon.source: bCaptionOn ? "qrc:/assets/icon/captionOn.png" : "qrc:/assets/icon/captionOff.png"
+            icon.color: bCaptionOn ? globalButtonColor : "#f3f3f3"
             icon.height: 35
             icon.width: 35
             ToolTip.visible: hovered

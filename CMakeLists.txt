@@ -11,7 +11,13 @@ endif()
 
 #添加所需的包
 #Qt
-find_package(Qt6 6.5 REQUIRED Core COMPONENTS Quick Multimedia)
+find_package(
+    Qt6 6.5 REQUIRED
+    Core COMPONENTS Quick Multimedia
+    COMPONENTS Xml
+)
+
+
 #FFmpeg
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIBAV REQUIRED IMPORTED_TARGET
@@ -29,7 +35,7 @@ qt_standard_project_setup(REQUIRES 6.5)
 qt_add_executable(appQtMediaPlayer)
 
 # 设置版本号
-add_definitions(-DVERSION=1,0,9,0)
+add_definitions(-DVERSION=1,0,11,0)
 
 # 获取文件路径分隔符（解决执行命令的时候有些平台会报错）
 file(TO_CMAKE_PATH "/" PATH_SEPARATOR)
@@ -94,6 +100,7 @@ target_link_libraries(appQtMediaPlayer
     PRIVATE
         Qt6::Quick
         Qt6::Multimedia
+        Qt6::Xml
         PkgConfig::LIBAV
 )
 

@@ -9,14 +9,13 @@ import QtQuick.Particles
 import "../components"
 import "../model"
 
-Item{
+Item {
     // background
     Rectangle {
         id: background
         anchors.fill: parent
-        color:"#ffffff"
+        color: Qt.rgba(globalPageColor.r + 0.1, globalPageColor.g + 0.1, globalPageColor.b + 0.1, globalPageColor.a)
         opacity: 0.95
-
     }
 
     Item {
@@ -25,6 +24,9 @@ Item{
         LayoutHearderView {
             id:layoutHeaderView
             z:1000
+
+            homePageButtonColor: globalButtonColor
+            settingButtonColor: "#333333"
         }
 
         DetailRecommendPageView {

@@ -7,6 +7,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Particles
 import QtQuick.Layouts
+import Qt.labs.settings
 import "components"
 import "./pages"
 
@@ -24,7 +25,12 @@ ApplicationWindow {
     minimumWidth: 800
     minimumHeight: 450
 
+    // 全局字体设置
     property string mFONT_FAMILY: "微软雅黑"
+    // 全局按钮设置
+    property color globalButtonColor: "#1195db"
+    // 全局背景颜色设置
+    property color globalPageColor: "#eeeeee"
 
     visible: true
     color: "#00000000"
@@ -45,18 +51,28 @@ ApplicationWindow {
         AboutPage { }
     }
 
+    Component {
+        id: settingPage
+        SettingPage { }
+    }
+
     StackView {
         id: stackView
         anchors.fill: parent
-        //initialItem: myhomepage
         initialItem: homePage
     }
+
+//    Settings {
+//        id: settings
+//        fileName: "conf/settings.ini"
+//    }
 
 
     function changePageForHome() { stackView.replace( homePage ) }
 
-
     function changePageForPlayer() { stackView.replace( playerPage ) }
 
-    function changePageForAbout() { stackView.replace( stackView ) }
+    function changePageForAbout() { stackView.replace( aboutPage ) }
+
+    function changePageForSetting() { stackView.replace( settingPage ) }
 }
