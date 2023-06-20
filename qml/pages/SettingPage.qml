@@ -10,7 +10,6 @@ Item {
         anchors.fill: parent
         color: Qt.rgba(globalPageColor.r + 0.1, globalPageColor.g + 0.1, globalPageColor.b + 0.1, globalPageColor.a)
         opacity: 0.95
-
     }
 
     Item {
@@ -27,32 +26,60 @@ Item {
         ColorDialog {
             id: colorDialogButton
             onAccepted: {
-                globalButtonColor = selectedColor
+                settings.gb = selectedColor
             }
         }
 
         ColorDialog {
             id: colorDialogGlobal
             onAccepted: {
-                globalPageColor = selectedColor
+                settings.gp = selectedColor
+            }
+        }
+
+
+
+        Button {
+            id: pageColorButton
+            anchors {
+                verticalCenter: parent.verticalCenter
+                horizontalCenter: parent.horizontalCenter
+            }
+
+            text: "Change Page Color"
+            onClicked: {
+                colorDialogGlobal.open()
             }
         }
 
         Button {
             id: buttonColorButton
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                top: pageColorButton.bottom
+                topMargin: 20
+            }
+
             text: "Change Button Color"
-            anchors.centerIn: parent
             onClicked: {
                 colorDialogButton.open()
             }
+
         }
 
         Button {
-            text: "Change Global Color"
-            anchors.top: buttonColorButton.bottom
-            onClicked: {
-                colorDialogGlobal.open()
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                top: buttonColorButton.bottom
+                topMargin: 20
             }
+
+            text: "Reset Color"
+            onClicked: {
+                settings.gb = "#1195db"
+                settings.gp = "#eeeeee"
+            }
+
         }
 
     }

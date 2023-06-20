@@ -59,7 +59,7 @@ Drawer {
             delegate: playlistdelegate
             highlight:
                 Rectangle {
-                color: "#1195db"
+                color: globalButtonColor
                 radius: 5
                 opacity: 1
             }

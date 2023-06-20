@@ -45,7 +45,7 @@ public:
      * @param color 文字颜色，默认黑色
      */
     Q_INVOKABLE
-        void saveDanmu(const QString& timestamp, const QString& content, int fontsize = 10, const QString& color = "black");
+        void saveDanmu(const QString& timestamp, const QString& content, int fontsize = 10, const QString& color = "white");
 
     /**
      * @brief 将弹幕存为XML文件
