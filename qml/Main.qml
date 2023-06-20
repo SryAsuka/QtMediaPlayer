@@ -28,9 +28,9 @@ ApplicationWindow {
     // 全局字体设置
     property string mFONT_FAMILY: "微软雅黑"
     // 全局按钮设置
-    property color globalButtonColor: "#1195db"
+    property color globalButtonColor: settings.gb
     // 全局背景颜色设置
-    property color globalPageColor: "#eeeeee"
+    property color globalPageColor: settings.gp
 
     visible: true
     color: "#00000000"
@@ -62,10 +62,13 @@ ApplicationWindow {
         initialItem: homePage
     }
 
-//    Settings {
-//        id: settings
-//        fileName: "conf/settings.ini"
-//    }
+    Settings {
+        id: settings
+        // settings.ini文件保存路径
+        fileName: "/root/.config/QtMediaPlayer/settings.ini"
+        property color gb: "#1195db"
+        property color gp: "#eeeeee"
+    }
 
 
     function changePageForHome() { stackView.replace( homePage ) }

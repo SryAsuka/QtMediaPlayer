@@ -8,9 +8,15 @@ import QtQuick.Controls
 import QtQml.XmlListModel
 
 Item {
+    id: bullectscreenComponent
     property Timer hideTimer
     // 弹幕是否开启，默认开启
     property bool bBullet: true
+
+    property int textSize
+
+    property color textColor
+
     height: 30
     width: 700
 
@@ -89,6 +95,12 @@ Item {
 
             onClicked: {
                 // 弹幕设置
+                if( !videoPlayer.bullectSettingDrawer.opened){
+                    videoPlayer.bullectSettingDrawer.open()
+                }else{
+                    videoPlayer.bullectSettingDrawer.close()
+                }
+
             }
         }
 
@@ -196,6 +208,8 @@ Item {
     }
 
     function sendDanmu() {
+        textSize = videoPlayer.bullectSettingDrawer.textSize
+        textColor = videoPlayer.bullectSettingDrawer.textColor
 
         var timestamp
         var millseconds = player.position
@@ -212,7 +226,7 @@ Item {
             timestamp =  "0" + minutes + ":" + seconds
         else    timestamp =  minutes + ":" + seconds
 
-        bulletxml.saveDanmu(timestamp, bulletInput.text)
+        bulletxml.saveDanmu(timestamp, bulletInput.text, textSize, textColor)
         // Add danmu to the ListView
         //videoPlayer.danmuModel.append({"content": content, "fontsize": 20, "color": "white"});
     }

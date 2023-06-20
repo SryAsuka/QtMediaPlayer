@@ -27,6 +27,8 @@ Rectangle {
 
     property PlayFileList playFileList: playFileListComponents
 
+    property BullectSettingDrawer bullectSettingDrawer: bullectSettingConmponents
+
     id: videoPlayer
     color: "black"
 
@@ -75,6 +77,11 @@ Rectangle {
     //Li:  从AbstractListModel中获取数据
     PlayFileList{
         id: playFileListComponents
+    }
+
+    // 加载弹幕设置BullectSettingDrawer组件
+    BullectSettingDrawer {
+        id: bullectSettingConmponents
     }
 
     // 屏幕中间的播放按钮，点击一下视频暂停图标显示，再点击视频播放图标隐藏
