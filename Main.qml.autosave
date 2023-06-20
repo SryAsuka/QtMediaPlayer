@@ -11,8 +11,7 @@ ApplicationWindow {
     height: 480
     title: qsTr("Hello World")
     property var liststr:[]
-    mySql.getMsgList:liststr
-//    property var liststr: ["呵呵o(*￣︶￣*)o","nihao","ceshisx","你是说","啥意思","哈哈"]
+    // property var liststr: ["呵呵o(*￣︶￣*)o","nihao","ceshisx","你是说","啥意思","哈哈"]
     property int index: 0
 
 //    Rectangle{

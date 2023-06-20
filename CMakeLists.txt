@@ -23,6 +23,7 @@ qt_add_qml_module(appuntitled
     VERSION 1.0
     QML_FILES 
         Main.qml
+        barrage.qml
 )
 
 target_compile_features(appuntitled PRIVATE cxx_std_20)
