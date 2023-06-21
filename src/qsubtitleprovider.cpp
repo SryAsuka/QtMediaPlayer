@@ -1,3 +1,8 @@
+/*  To abstract the recent/play list , make get thumbnail easier
+ *  Author: SryAsuka
+ *  Data: 2023.6
+**/
+
 #include "qsubtitleprovider.h"
 
 #include <QString>

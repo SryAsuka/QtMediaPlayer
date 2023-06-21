@@ -1,3 +1,8 @@
+/*  To provide subtitle
+ *  Author: SryAsuka
+ *  Data: 2023.6
+**/
+
 #ifndef QSUBTITLEPROVIDER_H
 #define QSUBTITLEPROVIDER_H
 
