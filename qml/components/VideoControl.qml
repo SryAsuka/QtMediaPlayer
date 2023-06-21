@@ -16,6 +16,8 @@ Rectangle {
     id: videoControl
     z:100
 
+    property alias subtitleButton: captionButton
+
     property int progressHeight: 0
     property MediaPlayer player
     property Timer hideTimer
@@ -333,7 +335,7 @@ Rectangle {
             id: videoSpeedButton
             anchors {
                 verticalCenter: parent.verticalCenter
-                right: captionButton.left
+                right: volumeButton.left
                 rightMargin: 20
             }
 
@@ -392,7 +394,7 @@ Rectangle {
             id: captionButton
             anchors {
                 verticalCenter: parent.verticalCenter
-                right: volumeButton.left
+                right: videoSpeedButton.left
                 rightMargin: 20
             }
 
@@ -402,11 +404,16 @@ Rectangle {
                 color: "transparent"
 
                 MouseArea {
+                    id:subtitleArea
                     anchors.fill: parent
                     hoverEnabled: true  // 启用鼠标悬停
                     propagateComposedEvents: true
                     onPositionChanged: {
+                        videoPlayer.playFileList.close()
                         hideTimer.stop()
+                        hideVolumeTimer.stop()
+                        subtitleRec.width = 180
+                        subtitleRec.height = 160
                     }
                 }
             }
@@ -425,6 +432,18 @@ Rectangle {
 
                 } else {
                     bCaptionOn = true
+                }
+            }
+            // 隐藏音量条的计时器
+            Timer {
+                id: hideSubtitleTimer
+                interval: 1200  // 1s后自动隐藏
+                // 鼠标不在按钮上时，开始计时
+                running: !subtitleArea.containsMouse
+                repeat: false
+                onTriggered: {
+                    subtitleRec.height = 0
+                    subtitleRec.width = 0
                 }
             }
         }
@@ -455,7 +474,6 @@ Rectangle {
                         hideVolumeTimer.stop()
                         volumeRec.height = 120
                         volumeRec.width = 40
-                        progressHeight = 200;
 
                     }
                 }
@@ -481,7 +499,6 @@ Rectangle {
                 onTriggered: {
                     volumeRec.height = 0
                     volumeRec.width = 0
-                    progressHeight = 120
                 }
             }
         }
@@ -591,7 +608,7 @@ Rectangle {
             color: "#ffffff"
             anchors.left: volumeButton.left
             anchors.leftMargin: -5
-            radius: 10
+            radius: 5
             y:-140
 
             Behavior on width {
@@ -618,7 +635,7 @@ Rectangle {
                 background: Rectangle{
                     anchors.verticalCenter: parent.verticalCenter
                     x: volumeSlider.leftPadding + 5
-                    color :  "#1195db"
+                    color :  globalButtonColor
                     height: volumeSlider.availableHeight
                     width: implicitWidth
                     implicitWidth: 4

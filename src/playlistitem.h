@@ -10,6 +10,7 @@
 
 #include <QObject>
 #include <QMediaPlayer>
+#include <QFileInfo>
 
 
 class PlayListItem: public ListItem
@@ -40,6 +41,9 @@ public:
 
     QStringList findSubFiles(const QString &path);
     void appendSubFile(const QString &path);
+    QString setDefaultSub();
+
+    bool hasSuffix(const QFileInfo &fileInfo, const QStringList &suffixes);
 
 private:
     QString m_fileName;

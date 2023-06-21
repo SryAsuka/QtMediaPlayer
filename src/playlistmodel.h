@@ -66,6 +66,7 @@ public:
     //返回视频相应的字幕list
     Q_INVOKABLE QStringList subFilePaths(int index = -1);
     Q_INVOKABLE void appendSubFile(int index,const QString &path);
+    Q_INVOKABLE QString setDefaultSub(int index = -1);
 
     //get,set,Changed
     Q_INVOKABLE bool getIsSibling() const;

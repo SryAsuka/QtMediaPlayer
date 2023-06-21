@@ -20,7 +20,7 @@ public:
     QSubtitleProvider(QObject *parent = nullptr);
 
 
-    void selectedSubFile(const QString &path);
+    Q_INVOKABLE void selectedSubFile(const QString &path);
 
     void readSrtSubFile(const QString &path);
     Q_INVOKABLE void getSrtSubText(double playTime);

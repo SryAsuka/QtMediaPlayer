@@ -6,6 +6,7 @@
 #include "src/recentfilesmodel.h"
 #include "src/playlistmodel.h"
 #include "src/bulletxml.h"
+#include "src/qsubtitleprovider.h"
 
 int main(int argc, char *argv[])
 {
@@ -15,6 +16,7 @@ int main(int argc, char *argv[])
     app.setWindowIcon(QIcon(":/assets/icon/video.png"));
     PlayListModel *playlist = new PlayListModel(nullptr);
     ModelThumnailProvider *playthumnail = new ModelThumnailProvider(playlist);
+    QSubtitleProvider *SubProvider = new QSubtitleProvider(nullptr);
 
 
     QQmlApplicationEngine engine;
@@ -33,6 +35,9 @@ int main(int argc, char *argv[])
 
     engine.rootContext()->setContextProperty("mainPlaylist", playlist);
     engine.addImageProvider("playlistTh",playthumnail);
+
+    engine.rootContext()->setContextProperty ("subProvider",SubProvider);
+
     engine.load(url);
 
     return app.exec();

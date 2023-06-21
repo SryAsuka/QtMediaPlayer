@@ -16,11 +16,17 @@ void QSubtitleProvider::selectedSubFile(const QString &path)
     QString suffix = fileInfo.suffix();
     if(suffix == "srt"){
         qDebug()<<"The file is an STR file";
+        m_srtSub.clear();
+        m_subText.clear();
+        emit subTextChanged();
         readSrtSubFile(fileInfo.absoluteFilePath());
     } else if(suffix == "ass"){
         qDebug()<<"The file is an STR file,but no method to parser";
-    } else {
+    } else if(suffix == "null"){
         qDebug()<<"cannot parser";
+        m_srtSub.clear();
+        m_subText.clear();
+        emit subTextChanged();
     }
 }
 
@@ -43,7 +49,6 @@ void QSubtitleProvider::getSrtSubText(double playTime){
         if( (startTime <= playTime) && (playTime <= endTime)) {
             setSubText(QString::fromStdString(element->getText()));
         }
-        qDebug()<<playTime;
     }
 }
 

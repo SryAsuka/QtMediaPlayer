@@ -28,6 +28,7 @@ Item{
         RowLayout{
             anchors.fill: parent
 
+            //编号
             Label{
                 text: pad(playListItem.rowNum,dListView.count.toString().length)
                 horizontalAlignment: Qt.AlignCenter
@@ -45,15 +46,15 @@ Item{
 
             }
 
+            //修饰边
             Rectangle{
                 width: 1
                 color: "white"
                 Layout.fillHeight: true
             }
 
-
-
-                Item{
+            //图片时间
+            Item{
                     width: (playListItem.height - 30) * 1.33333
                     height: playListItem.height - 30
 
@@ -87,7 +88,7 @@ Item{
                     }
                 }
 
-
+            //视频名
             Label{
 
                 text: title
