@@ -16,9 +16,23 @@ Item {
     property int textSize
 
     property color textColor
-
+    property var liststr: ["呵呵o(*￣︶￣*)o","6666666666666","！！！！！！！！！","哈哈哈哈","太厉害了！","这只猪好蠢"]
+    property int index: 0
     height: 30
     width: 700
+    Component.onCompleted: {
+            addItem();
+    }
+    //用于控制弹幕发射的定时器
+    Timer {
+             id:barragrTimer
+             interval: 1000
+             running: true
+             repeat: true
+             triggeredOnStart: false//后续点击的时候才加载
+             onTriggered: addItem()
+         }
+
 
     Item {
         id: bulletBar
@@ -58,6 +72,10 @@ Item {
 
             onClicked: {
                 bBullet = !bBullet
+                if(bBullet)
+                    barragrTimer.start()
+                else
+                    barragrTimer.stop()
             }
         }
 
@@ -230,4 +248,22 @@ Item {
         // Add danmu to the ListView
         //videoPlayer.danmuModel.append({"content": content, "fontsize": 20, "color": "white"});
     }
+    //动态加载组建 后续通过调用方法来实现组建的动态加载
+    function addItem()
+       {
+          var oldy = Math.random()*500%200 ;
+          for (var i = 0 ; i < 1; ++i)
+          {
+              var component = Qt.createComponent("/root/barrage/qml/components/Barrage.qml");//加载组建
+
+              if (component.status ===Component.Ready)
+              {
+                  var textitem = component.createObject(videoPlayer);
+                  oldy +=30;
+                  textitem.y = oldy;
+                  index = Number(oldy%5);
+                  textitem.textstr = liststr[index];
+              }
+          }
+       }
 }

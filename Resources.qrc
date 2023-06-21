@@ -35,5 +35,6 @@
         <file>assets/background/spot.png</file>
         <file>qml/pages/SettingPage.qml</file>
         <file>qml/components/BullectSettingDrawer.qml</file>
+        <file>qml/components/Barrage.qml</file>
     </qresource>
 </RCC>
