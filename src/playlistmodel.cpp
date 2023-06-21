@@ -1,13 +1,15 @@
+/*  To get Get the videos in the same directory
+ *  Author: SryAsuka
+ *  Data: 2023.6
+**/
+
 #include "playlistmodel.h"
 #include "playlistitem.h"
 
 
 #include <QUrl>
 #include <QCollator>
-/*  To get Get the videos in the same directory
- *  Author: SryAsuka
- *  Data: 2023.6
-**/
+
 
 #include <QDirIterator>
 #include <QFileInfo>
@@ -125,6 +127,23 @@ void PlayListModel::getSiblingItems(QUrl url)
     }
 }
 
+QStringList PlayListModel::subFilePaths(int index)
+{
+    // ensure the requested path is valid
+    if (m_playlist.isEmpty()) {
+        return QStringList();
+    }
+    if (m_playlist.size() <= index) {
+        return m_playlist[0]->subFilePaths();
+    }
+    return m_playlist[index]->subFilePaths();
+}
+
+void PlayListModel::appendSubFile(int index,const QString &path)
+{
+    m_playlist[index]-> appendSubFile(path);
+}
+
 QString PlayListModel::getPath(int index)
 {
     // ensure the requested path is valid
@@ -136,6 +155,19 @@ QString PlayListModel::getPath(int index)
     }
     return m_playlist[index]->filePath();
 }
+
+
+//QString PlayListModel::getPath(int index)
+//{
+//    // ensure the requested path is valid
+//    if (m_playlist.isEmpty()) {
+//        return QString();
+//    }
+//    if (m_playlist.size() <= index) {
+//        return m_playlist[0]->filePath();
+//    }
+//    return m_playlist[index]->filePath();
+//}
 
 void PlayListModel::removeItem(int index)
 {

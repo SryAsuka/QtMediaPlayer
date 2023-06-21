@@ -14,13 +14,13 @@ import "../pages"
 // 视频控制区域
 Rectangle {
     id: videoControl
-//    z:100
-    property int progressHeight: 120
+    z:100
+
+    property int progressHeight: 0
     property MediaPlayer player
     property Timer hideTimer
     property BulletscreenComponent bulletscreenComponent
-    // 是否显示音量滑块
-    property bool bAudioVisable: false
+
     // 播放速度
     property double videoSpeed: 1
 
@@ -33,7 +33,7 @@ Rectangle {
         height: progressHeight
         color: "transparent"
         anchors {
-            bottom: parent.bottom
+            bottom: controlButton.top
             left: parent.left
             right: parent.right
         }
@@ -43,7 +43,7 @@ Rectangle {
             id: progressBar
             // 设置进度条锚点
             anchors {
-                top: parent.top
+                bottom: parent.bottom
                 topMargin: 30
                 left: durationTime.right
                 leftMargin: 20
@@ -192,6 +192,9 @@ Rectangle {
 
     // 下方播放、弹幕区域
     Item {
+
+        id: controlButton
+
         anchors {
             bottom: parent.bottom
             left: parent.left
@@ -450,7 +453,10 @@ Rectangle {
                         videoPlayer.playFileList.close()
                         hideTimer.stop()
                         hideVolumeTimer.stop()
-                        bAudioVisable = true
+                        volumeRec.height = 120
+                        volumeRec.width = 40
+                        progressHeight = 200;
+
                     }
                 }
             }
@@ -465,52 +471,17 @@ Rectangle {
                 volumeSlider.value = 0
             }
 
-            Slider {
-                id: volumeSlider
-                anchors {
-                    bottom: volumeButton.top
-                    bottomMargin: 10
-                    left: volumeButton.left
-                    leftMargin: 5
-                }
-
-                visible: bAudioVisable
-                // 音量条为竖的
-                orientation: Qt.Vertical
-                from: 0
-                value: 50
-                to: 100
-                onValueChanged: {
-                    player.audioOutput.volume = value / 100
-
-                    if (value === 0) {
-                        volumeButton.icon.source = "qrc:/assets/icon/volumeMute.png"
-                    } else {
-                        volumeButton.icon.source = "qrc:/assets/icon/volume.png"
-                    }
-                }
-
-                // 当进度条在拖放时，不要启动隐藏计时器，不要隐藏音量条
-                onPressedChanged: {
-                    if (pressed) {
-                        hideTimer.stop()
-                        hideVolumeTimer.stop()
-                    } else {
-                        hideTimer.restart()
-                        hideVolumeTimer.restart()
-                    }
-                }
-            }
-
             // 隐藏音量条的计时器
             Timer {
                 id: hideVolumeTimer
-                interval: 1000  // 1s后自动隐藏
+                interval: 1200  // 1s后自动隐藏
                 // 鼠标不在按钮上时，开始计时
                 running: !volumeMouseArea.containsMouse
                 repeat: false
                 onTriggered: {
-                    bAudioVisable = false
+                    volumeRec.height = 0
+                    volumeRec.width = 0
+                    progressHeight = 120
                 }
             }
         }
@@ -610,7 +581,125 @@ Rectangle {
             }
         }
 
+        //音量条弹窗部分
+        Rectangle{
+            id : volumeRec
+
+            //anchors
+            width: 0
+            height: 0
+            color: "#ffffff"
+            anchors.left: volumeButton.left
+            anchors.leftMargin: -5
+            radius: 10
+            y:-140
+
+            Behavior on width {
+                NumberAnimation { duration: 80 }
+            }
+            Behavior on height {
+                NumberAnimation { duration: 80 }
+            }
+
+            Slider {
+                id: volumeSlider
+
+                anchors.verticalCenter: parent.verticalCenter
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                // 音量条为竖的
+                orientation: Qt.Vertical
+                from: 0
+                value: 50
+                to: 100
+                height: parent.height - 20
+
+                // volumeSlider background
+                background: Rectangle{
+                    anchors.verticalCenter: parent.verticalCenter
+                    x: volumeSlider.leftPadding + 5
+                    color :  "#1195db"
+                    height: volumeSlider.availableHeight
+                    width: implicitWidth
+                    implicitWidth: 4
+                    radius: 2
+
+                    Rectangle{
+                        height: volumeSlider.visualPosition * parent.height
+                        width: parent.width
+                        color: "#6a7a82"
+                        radius: 2
+                    }
+
+                }
+
+                // volumeSlider handle
+                handle: Rectangle{
+                    id: handler
+                    x: volumeSlider.availableWidth / 2 - width / 2
+//                    y: volumeSlider.topPadding + volumeSlider.availableHeight / 2 - height / 2
+                    y: volumeSlider.visualPosition * (volumeSlider.availableHeight - height)
+                    implicitWidth: volumeSlider.height * 0.14
+                    implicitHeight: volumeSlider.height * 0.14
+                    border.color :  "#1195db"
+                    border.width: (volumeSlider.pressed)? 1 : radius / 2
+                    color:  "#f0f0f0"
+                    scale: (volumeSlider.pressed) ? 1.1 : 1
+                    radius: 7
+
+                    Behavior on scale {
+                        NumberAnimation { duration: 100 }
+                    }
+
+                    Behavior on border.width {
+                        NumberAnimation { duration: 100 }
+                    }
+
+                }
+
+
+                onValueChanged: {
+                    player.audioOutput.volume = value / 100
+
+                    if (player.audioOutput.volume === 0) {
+                        volumeButton.icon.source = "qrc:/assets/icon/volumeMute.png"
+                    } else {
+                        volumeButton.icon.source = "qrc:/assets/icon/volume.png"
+                    }
+                }
+
+                        // 当进度条在拖放时，不要启动隐藏计时器，不要隐藏音量条
+                onPressedChanged: {
+                        if (pressed) {
+                            hideTimer.stop()
+                            hideVolumeTimer.stop()
+                        } else {
+                            hideTimer.restart()
+                            hideVolumeTimer.restart()
+                        }
+                    }
+
+
+
+                }
+
+
+
+        }
+
+        SubtitleRec{
+            id : subtitleRec
+
+        }
+
+
+
+
     }
+
+
+
+
 
     // 设置背景渐变效果
     gradient: Gradient {

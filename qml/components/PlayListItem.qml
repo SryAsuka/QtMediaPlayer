@@ -19,8 +19,6 @@ Item{
     property string rowNum : (index + 1).toString()
 
 
-
-
     Rectangle{
         anchors.fill: parent
 

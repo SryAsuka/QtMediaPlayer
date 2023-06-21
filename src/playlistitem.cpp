@@ -9,6 +9,7 @@
 #include <QUrl>
 #include <QMediaPlayer>
 #include <QMediaMetaData>
+#include <QDir>
 
 
 PlayListItem::PlayListItem(const QString &path, QObject *parent)
@@ -83,4 +84,54 @@ void PlayListItem::setThumbtail(const QImage &image){
     m_thumbnail = image;
 }
 
+QStringList PlayListItem::subFilePaths() const
+{
+    return m_subFilesPaths;
+}
+
+void PlayListItem::setSubFilePaths(const QStringList &newSubFiles)
+{
+    m_subFilesPaths = newSubFiles;
+}
+
+QStringList PlayListItem::findSubFiles(const QString &path){
+
+    //prepare
+    QStringList pSubFiles;
+    QString videoPath = path;
+    QFileInfo videoInfo(videoPath);
+
+    //to match
+    QString videoBaseName = videoInfo.completeBaseName();
+
+    //to find
+    QDir videoDir = videoInfo.dir();
+    QStringList subFileFilters ;
+    subFileFilters<<"*.srt"<<"*.ass";
+
+    QStringList subFiles = videoDir.entryList(subFileFilters,QDir::Files);
+    for(const QString &subFile : subFiles){
+
+        QFileInfo subFileInfo(subFile);
+
+        if(subFileInfo.completeBaseName().startsWith(videoBaseName)){
+
+            pSubFiles.append(subFileInfo.absoluteFilePath());
+            qDebug()<<"find subTitle"<<subFileInfo.absoluteFilePath();
+
+        }
+    }
+
+    return pSubFiles;
+}
+
+void PlayListItem::appendSubFile(const QString &path)
+{
+    QFileInfo fileInfo(path);
+    QString suffix = fileInfo.suffix();
+    if( suffix == "srt" || suffix == "ass")
+    {
+        m_subFilesPaths.append(fileInfo.absoluteFilePath());
+    }
+}
 

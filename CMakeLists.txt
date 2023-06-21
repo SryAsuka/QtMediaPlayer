@@ -16,8 +16,6 @@ find_package(
     Core COMPONENTS Quick Multimedia
     COMPONENTS Xml
 )
-
-
 #FFmpeg
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIBAV REQUIRED IMPORTED_TARGET

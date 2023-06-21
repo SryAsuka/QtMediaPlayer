@@ -13,8 +13,9 @@ import "../pages"
 // 视频标题栏
 Rectangle {
     id: videoTitleItem
-    property int videoTitleHeight: 80
+    property int videoTitleHeight: 0
     property Timer hideTimer
+    z:100
 
     property alias dVideoTitle: videoTitleText
 
@@ -220,8 +221,8 @@ Rectangle {
                 videoPlayer.playFileList.open()
             }else{
                 videoPlayer.playFileList.close()
+                console.log("close")
             }
-
         }
     }
 

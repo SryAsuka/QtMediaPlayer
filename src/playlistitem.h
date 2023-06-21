@@ -35,6 +35,12 @@ public:
 
     void setThumbtail(const QImage &image) ;
 
+    QStringList subFilePaths() const;
+    void setSubFilePaths(const QStringList &newSubFiles);
+
+    QStringList findSubFiles(const QString &path);
+    void appendSubFile(const QString &path);
+
 private:
     QString m_fileName;
     QString m_filePath;
@@ -42,6 +48,7 @@ private:
     QString m_duration;
 
     QImage m_thumbnail;
+    QStringList m_subFilesPaths;
 
 
 };
