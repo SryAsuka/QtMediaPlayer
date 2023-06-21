@@ -16,7 +16,8 @@ Item {
     property int textSize
 
     property color textColor
-    property var liststr: ["呵呵o(*￣︶￣*)o","6666666666666","！！！！！！！！！","哈哈哈哈","太厉害了！","这只猪好蠢"]
+    property string str: ""
+    property var liststr: []
     property int index: 0
     height: 30
     width: 700
@@ -204,7 +205,7 @@ Item {
 
             onClicked: {
                 if (bulletInput.text !== "") {
-                    sendDanmu()
+                    sendBarrage()
                     bulletInput.text = "";
                 }
             }
@@ -225,45 +226,53 @@ Item {
         }
     }
 
-    function sendDanmu() {
+//    function sendDanmu() {
+//        textSize = videoPlayer.bullectSettingDrawer.textSize
+//        textColor = videoPlayer.bullectSettingDrawer.textColor
+
+//        var timestamp
+//        var millseconds = player.position
+//        var minutes = Math.floor(millseconds / 60000)
+//        millseconds -= minutes * 60000
+//        var seconds = millseconds / 1000
+//        seconds = Math.round(seconds)
+//        // 返回 mm : ss 格式时间
+//        if(minutes < 10 & seconds < 10)
+//            timestamp =  "0" + minutes + ":0" + seconds
+//        else if(minutes >= 10 & seconds < 10)
+//            timestamp =  minutes + ":0" + seconds
+//        else if(minutes < 10 & seconds >= 10)
+//            timestamp =  "0" + minutes + ":" + seconds
+//        else    timestamp =  minutes + ":" + seconds
+
+//        bulletxml.saveDanmu(timestamp, bulletInput.text, textSize, textColor)
+//        // Add danmu to the ListView
+//        //videoPlayer.danmuModel.append({"content": content, "fontsize": 20, "color": "white"});
+//    }
+    function sendBarrage(){
         textSize = videoPlayer.bullectSettingDrawer.textSize
         textColor = videoPlayer.bullectSettingDrawer.textColor
+        str=bulletInput.text
+        liststr.push(str)
 
-        var timestamp
-        var millseconds = player.position
-        var minutes = Math.floor(millseconds / 60000)
-        millseconds -= minutes * 60000
-        var seconds = millseconds / 1000
-        seconds = Math.round(seconds)
-        // 返回 mm : ss 格式时间
-        if(minutes < 10 & seconds < 10)
-            timestamp =  "0" + minutes + ":0" + seconds
-        else if(minutes >= 10 & seconds < 10)
-            timestamp =  minutes + ":0" + seconds
-        else if(minutes < 10 & seconds >= 10)
-            timestamp =  "0" + minutes + ":" + seconds
-        else    timestamp =  minutes + ":" + seconds
-
-        bulletxml.saveDanmu(timestamp, bulletInput.text, textSize, textColor)
-        // Add danmu to the ListView
-        //videoPlayer.danmuModel.append({"content": content, "fontsize": 20, "color": "white"});
     }
-    //动态加载组建 后续通过调用方法来实现组建的动态加载
     function addItem()
-       {
-          var oldy = Math.random()*500%200 ;
-          for (var i = 0 ; i < 1; ++i)
-          {
-              var component = Qt.createComponent("/root/barrage/qml/components/Barrage.qml");//加载组建
+       { var oldy = Math.random()*500%200 ;
+            for (var i = 0 ; i < 1; ++i)
+            {
 
+              var component = Qt.createComponent("/root/barrage/qml/components/Barrage.qml");
               if (component.status ===Component.Ready)
               {
                   var textitem = component.createObject(videoPlayer);
                   oldy +=30;
                   textitem.y = oldy;
-                  index = Number(oldy%5);
                   textitem.textstr = liststr[index];
+                  index++;
               }
-          }
-       }
 }
+       }
+
+}
+
+

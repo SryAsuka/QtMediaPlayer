@@ -1,5 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
+import "../components"
 
 Rectangle{
     id : root
@@ -9,8 +10,8 @@ Rectangle{
 
     Text {
         id : roottext
-        color: Qt.rgba(Math.random()+0.1,Math.random()+0.05,Math.random(),1);
-        font.pointSize: 20
+        color: videoPlayer.bullectSettingDrawer.textColor
+        font.pointSize: videoPlayer.bullectSettingDrawer.textSize
     }//弹幕文本设置
     NumberAnimation on  x{
         from : Math.random()*20

@@ -55,7 +55,7 @@ Drawer {
             text: "Change font size"
             color: "white"
         }
-
+property color textColor
         ComboBox {
             id: fontSizeBox
             model: ["10", "12", "14", "16", "18", "20", "22", "24", "26", "28", "30"]
