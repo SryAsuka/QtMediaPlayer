@@ -4,6 +4,7 @@
  */
 
 import QtQuick
+//import QtCore
 import QtQuick.Controls
 import QtQuick.Particles
 import QtQuick.Layouts

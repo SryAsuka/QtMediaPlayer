@@ -10,7 +10,7 @@
 
 
 import QtQuick
-import QtQuick.Controls
+import QtQuick.Controls 2.15
 import QtCore
 import Qt.labs.folderlistmodel
 import QtQuick.Layouts
@@ -19,25 +19,29 @@ import QtQuick.Layouts
 
 Drawer {
     id: drawer
+
+
+    property Timer controlTime
+
     width: 420
     height: parent.height - 150
-
     topMargin: 60
     bottomMargin: 90
-
     edge: Qt.RightEdge
+
+
+
     background: Rectangle {
         color: "#000000"
         opacity: 0.3
+        radius: 5
     }
 
     property alias dListView: listView
     property string filepath: ""
 
-
-
-
-
+//    modal: true
+//    modal.backgroud: "blue"
 
     // 文件列表
     ScrollView{
@@ -62,7 +66,7 @@ Drawer {
                 color: globalButtonColor
                 radius: 5
                 opacity: 1
-            }
+                }
             highlightMoveDuration: 100
             highlightMoveVelocity: -1
 
@@ -89,7 +93,6 @@ Drawer {
                         filepath = path
                         bulletxml.initDanmu(filepath.replace(new RegExp(title + '$'), ''), title)
 
-//                        videoPlayer.player
                         videoPlayer.player.play()
                         bShowPlayIcon()
                         videoTitleBar.dVideoTitle.text = title
@@ -99,6 +102,33 @@ Drawer {
 
             }
         }
+
+    MouseArea{
+        id : drawerArea
+        anchors.fill: parent
+        hoverEnabled: true
+        propagateComposedEvents: true
+        onExited: {
+            closerTimer.restart()
+            controlTime.restart()
+        }
+        onEntered: {
+            closerTimer.stop()
+            controlTime.stop()
+        }
+    }
+
+    Timer{
+
+        id: closerTimer
+        interval: 2000
+        running: false
+        repeat: false
+        onTriggered: {
+            drawer.close()
+        }
+
+    }
 
 }
 

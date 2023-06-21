@@ -56,10 +56,16 @@ public:
     Q_INVOKABLE void appendItem(QUrl url);
     //移除单个Item
     Q_INVOKABLE void removeItem(int index);
+    //get Path
     Q_INVOKABLE QString getPath(int index = -1);
+
 
     //MimeType分析函数
     QMimeType mimeTypeCheck(const QUrl url);
+
+    //返回视频相应的字幕list
+    Q_INVOKABLE QStringList subFilePaths(int index = -1);
+    Q_INVOKABLE void appendSubFile(int index,const QString &path);
 
     //get,set,Changed
     Q_INVOKABLE bool getIsSibling() const;
