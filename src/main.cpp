@@ -14,9 +14,13 @@ int main(int argc, char *argv[])
 
     // 设置图标
     app.setWindowIcon(QIcon(":/assets/icon/video.png"));
+
     PlayListModel *playlist = new PlayListModel(nullptr);
     ModelThumnailProvider *playthumnail = new ModelThumnailProvider(playlist);
     QSubtitleProvider *SubProvider = new QSubtitleProvider(nullptr);
+    BulletXml bulletxml;
+    RecentFilesModel *recentlist = new RecentFilesModel(nullptr);
+    ModelThumnailProvider *recentthumnail = new ModelThumnailProvider(recentlist);
 
 
     QQmlApplicationEngine engine;
@@ -29,12 +33,14 @@ int main(int argc, char *argv[])
         }, Qt::QueuedConnection);
 
 
-    BulletXml bulletxml;
+
 
     engine.rootContext()->setContextProperty("bulletxml", &bulletxml);
 
     engine.rootContext()->setContextProperty("mainPlaylist", playlist);
     engine.addImageProvider("playlistTh",playthumnail);
+    engine.rootContext()->setContextProperty("mainRecentlist", recentlist);
+    engine.addImageProvider("recentlistTh",recentthumnail);
 
     engine.rootContext()->setContextProperty ("subProvider",SubProvider);
 

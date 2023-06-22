@@ -28,7 +28,12 @@ void QSubtitleProvider::selectedSubFile(const QString &path)
     } else if(suffix == "ass"){
         qDebug()<<"The file is an STR file,but no method to parser";
     } else if(suffix == "null"){
-        qDebug()<<"cannot parser";
+        qDebug()<<"do not show";
+        m_srtSub.clear();
+        m_subText.clear();
+        emit subTextChanged();
+    }else{
+        qDebug()<<"error subtitle";
         m_srtSub.clear();
         m_subText.clear();
         emit subTextChanged();

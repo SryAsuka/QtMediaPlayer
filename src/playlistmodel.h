@@ -42,7 +42,7 @@ public:
 
     //Listmodel 起手三样式
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    Q_INVOKABLE QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     virtual QHash<int, QByteArray> roleNames() const override;
 
     //清除记录

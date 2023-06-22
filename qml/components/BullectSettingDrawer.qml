@@ -8,8 +8,17 @@ Rectangle {
     height: 0
     color : "#ffffff"
 
-    anchors.right: bulletSettingButton.right
-    anchors.rightMargin: -60
+
+    Behavior on width {
+        NumberAnimation { duration: 80 }
+    }
+    Behavior on height {
+        NumberAnimation { duration: 80 }
+    }
+
+
+    anchors.left: bulletSettingButton.left
+    anchors.leftMargin: -60
     y:-160
     radius: 5
     clip: true
@@ -59,6 +68,7 @@ Rectangle {
             currentIndex: 0
 
             width: 100
+
         }
 
         Label {

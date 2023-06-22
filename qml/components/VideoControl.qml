@@ -5,6 +5,11 @@
  * 2023.6.14上午：增加滑块样式
  * 2023.6.14下午：增加进度条拖动功能
  * 2023.6.15上午：实现全屏
+ *
+ *  fix the bug
+ *  Author: SryAsuka
+ *  Data: 2023.6
+ *
  */
 import QtQuick
 import QtQuick.Controls
@@ -382,8 +387,9 @@ Rectangle {
             id: captionButton
             anchors {
                 verticalCenter: parent.verticalCenter
-                right: videoSpeedButton.left
-                rightMargin: 20
+//                right: videoSpeedButton.left
+                left: bulletscreenComponent.right
+                leftMargin: -15
             }
 
             opacity: 0.8    // 设置透明度
@@ -396,7 +402,7 @@ Rectangle {
                         if (hovered) { 
                             videoPlayer.playFileList.close()
                             hideTimer.stop()
-                            hideVolumeTimer.stop()
+                            hideSubtitleTimer.stop()
                             subtitleRec.width = 180
                             subtitleRec.height = 160                     
                         }
@@ -419,10 +425,14 @@ Rectangle {
             onClicked: {
                 if(bCaptionOn){
                     bCaptionOn = false
-
+                    subProvider.selectedSubFile("null.null");
+                    subtitleRec.sSubList.currentIndex = -1
                 } else {
                     bCaptionOn = true
+                    subtitleRec.sSubList.currentIndex = 0
+                    subProvider.selectedSubFile(mainPlaylist.setDefaultSub(playFileList.playListView.currentIndex));
                 }
+
             }
             // 隐藏字幕的计时器
             Timer {
@@ -459,7 +469,6 @@ Rectangle {
                             hideVolumeTimer.stop()
                             volumeRec.height = 120
                             volumeRec.width = 40
-                            progressHeight = 200;
                         }
                         else {
                             hideTimer.start()

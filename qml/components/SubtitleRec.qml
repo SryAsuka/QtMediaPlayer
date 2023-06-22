@@ -12,12 +12,23 @@ import QtQuick.Layouts
 Rectangle {
     id: subtitle
 
+    property alias sSubList: subList
+
     width: 0
     height: 0
     color : "#ffffff"
 
-    anchors.right: subtitleButton.right
-    anchors.rightMargin: -60
+    Behavior on width {
+        NumberAnimation { duration: 80 }
+    }
+    Behavior on height {
+        NumberAnimation { duration: 80 }
+    }
+
+
+
+    anchors.left: subtitleButton.left
+    anchors.leftMargin: -80
     y:-180
     radius: 5
     clip: true
@@ -37,71 +48,48 @@ Rectangle {
 
 
             model: mainPlaylist.subFilePaths(playFileList.playListView.currentIndex)
+
             delegate: subListdelegate
-            highlight:
-                Rectangle {
+
+            highlight:Rectangle {
                     color: globalButtonColor
                     radius: 5
                     opacity: 0.8
                 }
+
+
+
             highlightMoveDuration: 100
             highlightMoveVelocity: -1
 
-            footer: ItemDelegate{
+            footer: Rectangle{
                 id: subListFooter
                 width: parent.width
+
                 height: 50
+                radius: 5
+                color: "transparent"
 
-
-                Rectangle{
-                    anchors.fill: parent
-                    color: "transparent"
 
                     RowLayout{
                         anchors.fill: parent
 
                         Label{
 
-                        text: "Open Other"
-                        horizontalAlignment: Qt.AlignCenter
-                        verticalAlignment: Qt.AlignVCenter
-                        font.bold: true
+                            text: "Open Other Subtitle"
+                            horizontalAlignment: Qt.AlignHCenter
+                            verticalAlignment: Qt.AlignVCenter
+                            font.bold: true
 
-                        layer.enabled: true
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
+                            layer.enabled: true
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
 
-                        elide: Text.ElideRight
-                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-
-                        }
-
-                        Label{
-
-                        text: "Close Subtitle"
-                        horizontalAlignment: Qt.AlignCenter
-                        verticalAlignment: Qt.AlignVCenter
-                        font.bold: true
-
-                        layer.enabled: true
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-
-                        elide: Text.ElideRight
-                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-
-                        MouseArea{
-                            id:mouseArea
-                            anchors.fill: parent
-                            onClicked: {
-                                subProvider.selectedSubFile("null.null");
-                                subList.currentIndex = -1
-                            }
-                        }
+                            elide: Text.ElideRight
+                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
 
                         }
                     }
-                }
 
             }
         }
@@ -147,6 +135,7 @@ Rectangle {
                     onClicked: {
                         subList.currentIndex = index
                         subProvider.selectedSubFile(modelData);
+                        bCaptionOn = true
                     }
                 }
             }

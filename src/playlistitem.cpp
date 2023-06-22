@@ -125,7 +125,10 @@ QStringList PlayListItem::findSubFiles(const QString &path){
 
 QString PlayListItem::setDefaultSub()
 {
-    return m_subFilesPaths.first();
+    if(!m_subFilesPaths.isEmpty())
+        return m_subFilesPaths.first();
+    else
+        return "null";
 }
 
 bool PlayListItem::hasSuffix(const QFileInfo &fileInfo, const QStringList &suffixes){
