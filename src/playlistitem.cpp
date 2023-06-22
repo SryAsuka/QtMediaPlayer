@@ -9,7 +9,8 @@
 #include <QUrl>
 #include <QMediaPlayer>
 #include <QMediaMetaData>
-#include <QDir>
+#include <QDirIterator>
+#include <QStringList>
 
 
 PlayListItem::PlayListItem(const QString &path, QObject *parent)
@@ -24,6 +25,7 @@ PlayListItem::PlayListItem(const QString &path, QObject *parent)
     setFileName(fileInfo.fileName());
     setFilePath(fileInfo.absoluteFilePath());
     setFolderPath(fileInfo.absolutePath());
+    setSubFilePaths(findSubFiles(fileInfo.absoluteFilePath()));
     
     //获取Duration数据
     QMediaMetaData mediaData = m_player->metaData();
@@ -104,25 +106,30 @@ QStringList PlayListItem::findSubFiles(const QString &path){
     //to match
     QString videoBaseName = videoInfo.completeBaseName();
 
-    //to find
-    QDir videoDir = videoInfo.dir();
-    QStringList subFileFilters ;
-    subFileFilters<<"*.srt"<<"*.ass";
+    if(videoInfo.exists() && videoInfo.isFile()){
+        QDirIterator it(videoInfo.absolutePath(),QDir::Files,QDirIterator::NoIteratorFlags);
+        while (it.hasNext()) {
+            QString siblingFile = it.next();
 
-    QStringList subFiles = videoDir.entryList(subFileFilters,QDir::Files);
-    for(const QString &subFile : subFiles){
-
-        QFileInfo subFileInfo(subFile);
-
-        if(subFileInfo.completeBaseName().startsWith(videoBaseName)){
-
-            pSubFiles.append(subFileInfo.absoluteFilePath());
-            qDebug()<<"find subTitle"<<subFileInfo.absoluteFilePath();
-
+            QFileInfo siblingFileInfo(siblingFile);
+            if(hasSuffix(siblingFileInfo,{"srt","ass"})){
+                if(siblingFileInfo.completeBaseName().startsWith(videoBaseName)){
+                    pSubFiles.append(siblingFileInfo.absoluteFilePath());
+                }
+            }
         }
     }
 
     return pSubFiles;
+}
+
+QString PlayListItem::setDefaultSub()
+{
+    return m_subFilesPaths.first();
+}
+
+bool PlayListItem::hasSuffix(const QFileInfo &fileInfo, const QStringList &suffixes){
+    return suffixes.QStringList::contains(fileInfo.suffix(),Qt::CaseInsensitive);
 }
 
 void PlayListItem::appendSubFile(const QString &path)

@@ -20,7 +20,6 @@ RecentFilesModel::RecentFilesModel(QObject *parent):
 
     updateList();
     QSettings setting;
-    qDebug()<<"test";
     qDebug()<<setting.value("recentFiles");
 
 }
@@ -77,7 +76,6 @@ QMimeType RecentFilesModel::mimeTypeCheck(const QUrl url){
 }
 
 void RecentFilesModel::updateRecent(const QString &path){
-    qDebug()<<path;
     QUrl currentUrl(path);
     QMimeType mimeType = mimeTypeCheck(currentUrl);
     QFileInfo openedFileInfo(currentUrl.toLocalFile());

@@ -28,7 +28,7 @@ ApplicationWindow {
 
     // 全局字体设置
     property string mFONT_FAMILY: "微软雅黑"
-    // 全局按钮设置
+    // 全局按钮颜色设置
     property color globalButtonColor: settings.gb
     // 全局背景颜色设置
     property color globalPageColor: settings.gp

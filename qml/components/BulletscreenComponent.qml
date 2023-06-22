@@ -9,6 +9,9 @@ import QtQml.XmlListModel
 
 Item {
     id: bullectscreenComponent
+
+    property alias bulletSettingButton: bulletSetting
+
     property Timer hideTimer
     // 弹幕是否开启，默认开启
     property bool bBullet: true
@@ -74,8 +77,16 @@ Item {
 
                 HoverHandler {
                     onHoveredChanged: {
-                        if (hovered) { hideTimer.stop() }
-                        else { hideTimer.start() }
+                        if (hovered) {
+                            hideTimer.stop()
+                            hideBullectSettingTimer.stop()
+                            bullectSettingComponent.width = 150
+                            bullectSettingComponent.height = 120
+                        }
+                        else {
+                            hideTimer.start()
+                            hideBullectSettingTimer.start()
+                        }
                     }
                 }
             }
@@ -87,14 +98,15 @@ Item {
             ToolTip.visible: hovered
             ToolTip.text: "弹幕设置"
 
-            onClicked: {
-                // 弹幕设置
-                if(!videoPlayer.bullectSettingDrawer.opened){
-                    videoPlayer.bullectSettingDrawer.open()
-                } else {
-                    videoPlayer.bullectSettingDrawer.close()
+            // 隐藏弹幕设置的计时器
+            Timer {
+                id: hideBullectSettingTimer
+                interval: 1200  // 1s后自动隐藏
+                repeat: false
+                onTriggered: {
+                    bullectSettingComponent.height = 0
+                    bullectSettingComponent.width = 0
                 }
-
             }
         }
 
@@ -187,6 +199,11 @@ Item {
                     }
                 }
             }
+        }
+
+        // 加载弹幕设置BullectSettingDrawer组件
+        BullectSettingDrawer {
+            id: bullectSettingComponent
         }
     }
 
