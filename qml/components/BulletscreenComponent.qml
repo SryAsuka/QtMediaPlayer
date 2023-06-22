@@ -37,14 +37,11 @@ Item {
             background: Rectangle {
                 color: "transparent"
 
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true  // 启用鼠标悬停
-                    propagateComposedEvents: true
-                    onPositionChanged: {
-                        hideTimer.stop()
+                HoverHandler {
+                    onHoveredChanged: {
+                        if (hovered) { hideTimer.stop() }
+                        else { hideTimer.start() }
                     }
-
                 }
             }
 
@@ -75,14 +72,11 @@ Item {
             background: Rectangle {
                 color: "transparent"
 
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true  // 启用鼠标悬停
-                    propagateComposedEvents: true
-                    onPositionChanged: {
-                        hideTimer.stop()
+                HoverHandler {
+                    onHoveredChanged: {
+                        if (hovered) { hideTimer.stop() }
+                        else { hideTimer.start() }
                     }
-
                 }
             }
 
@@ -95,9 +89,9 @@ Item {
 
             onClicked: {
                 // 弹幕设置
-                if( !videoPlayer.bullectSettingDrawer.opened){
+                if(!videoPlayer.bullectSettingDrawer.opened){
                     videoPlayer.bullectSettingDrawer.open()
-                }else{
+                } else {
                     videoPlayer.bullectSettingDrawer.close()
                 }
 
@@ -146,19 +140,11 @@ Item {
             }
 
             // 当鼠标在输入框内，不隐藏进度条
-            MouseArea {
-                anchors.fill: parent
-                hoverEnabled: true  // 启用鼠标悬停
-                propagateComposedEvents: true
-                onPressed: mouse.accepted = false
-
-                onEntered: {
-                    hideTimer.stop()
+            HoverHandler {
+                onHoveredChanged: {
+                    if (hovered) { hideTimer.stop() }
+                    else { hideTimer.start() }
                 }
-                onExited: {
-                    hideTimer.start()
-                }
-
             }
         }
 
@@ -194,14 +180,11 @@ Item {
             background: Rectangle {
                 color: globalButtonColor
 
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true  // 启用鼠标悬停
-                    propagateComposedEvents: true
-                    onPositionChanged: {
-                        hideTimer.stop()
+                HoverHandler {
+                    onHoveredChanged: {
+                        if (hovered) { hideTimer.stop() }
+                        else { hideTimer.start() }
                     }
-
                 }
             }
         }

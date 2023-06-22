@@ -20,17 +20,17 @@ Frame {
 
         clip: true
 
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-            cursorShape: Qt.PointingHandCursor
-            onEntered: {
-                bannerTimer.stop()
-            }
-            onExited: {
-                bannerTimer.start()
-            }
-        }
+//        MouseArea {
+//            anchors.fill: parent
+//            hoverEnabled: true
+//            cursorShape: Qt.PointingHandCursor
+//            onEntered: {
+//                bannerTimer.stop()
+//            }
+//            onExited: {
+//                bannerTimer.start()
+//            }
+//        }
 
         delegate: Item {
             id: delegateItem
@@ -46,17 +46,17 @@ Frame {
                 height: delegateItem.height
             }
 
-            MouseArea {
-                anchors.fill: parent
-                cursorShape: Qt.PointingHandCursor
-                onClicked: {
-                    if(videoBannerView.currentIndex === index){
+//            MouseArea {
+//                anchors.fill: parent
+//                cursorShape: Qt.PointingHandCursor
+//                onClicked: {
+//                    if(videoBannerView.currentIndex === index){
 
-                    }else{
-                        videoBannerView.currentIndex = index
-                    }
-                }
-            }
+//                    }else{
+//                        videoBannerView.currentIndex = index
+//                    }
+//                }
+//            }
         }
 
         pathItemCount: 3
@@ -110,18 +110,18 @@ Frame {
                     duration: 200
                 }
             }
-            MouseArea {
-                anchors.fill: parent
-                hoverEnabled: true
-                cursorShape: Qt.PointingHandCursor
-                onEntered: {
-                    bannerTimer.stop()
-                    videoBannerView.currentIndex = index
-                }
-                onExited: {
-                    bannerTimer.start()
-                }
-            }
+//            MouseArea {
+//                anchors.fill: parent
+//                hoverEnabled: true
+//                cursorShape: Qt.PointingHandCursor
+//                onEntered: {
+//                    bannerTimer.stop()
+//                    videoBannerView.currentIndex = index
+//                }
+//                onExited: {
+//                    bannerTimer.start()
+//                }
+//            }
         }
     }
 

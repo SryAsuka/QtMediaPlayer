@@ -192,7 +192,6 @@ Rectangle {
 
     // 下方播放、弹幕区域
     Item {
-
         id: controlButton
 
         anchors {
@@ -202,7 +201,7 @@ Rectangle {
         }
         height: 60
 
-        // 上一个
+        // 后退按钮
         Button {
             id: upButton
             anchors {
@@ -216,14 +215,11 @@ Rectangle {
             background: Rectangle {
                 color: "transparent"
 
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true  // 启用鼠标悬停
-                    propagateComposedEvents: true
-                    onPositionChanged: {
-                        hideTimer.stop()
+                HoverHandler {
+                    onHoveredChanged: {
+                        if (hovered) { hideTimer.stop() }
+                        else { hideTimer.start() }
                     }
-
                 }
             }
 
@@ -253,12 +249,10 @@ Rectangle {
             background: Rectangle {
                 color: "transparent"
 
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true  // 启用鼠标悬停
-                    propagateComposedEvents: true
-                    onPositionChanged: {
-                        hideTimer.stop()
+                HoverHandler {
+                    onHoveredChanged: {
+                        if (hovered) { hideTimer.stop() }
+                        else { hideTimer.start() }
                     }
                 }
             }
@@ -281,7 +275,7 @@ Rectangle {
             }
         }
 
-        // 下一个
+        // 快进按钮
         Button {
             id: nextButton
             anchors {
@@ -295,14 +289,11 @@ Rectangle {
             background: Rectangle {
                 color: "transparent"
 
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true  // 启用鼠标悬停
-                    propagateComposedEvents: true
-                    onPositionChanged: {
-                        hideTimer.stop()
+                HoverHandler {
+                    onHoveredChanged: {
+                        if (hovered) { hideTimer.stop() }
+                        else { hideTimer.start() }
                     }
-
                 }
             }
 
@@ -350,14 +341,11 @@ Rectangle {
             background: Rectangle {
                 color: "transparent"
 
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true  // 启用鼠标悬停
-                    propagateComposedEvents: true
-                    onPositionChanged: {
-                        hideTimer.stop()
+                HoverHandler {
+                    onHoveredChanged: {
+                        if (hovered) { hideTimer.stop() }
+                        else { hideTimer.start() }
                     }
-
                 }
             }
 
@@ -401,12 +389,10 @@ Rectangle {
             background: Rectangle {
                 color: "transparent"
 
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true  // 启用鼠标悬停
-                    propagateComposedEvents: true
-                    onPositionChanged: {
-                        hideTimer.stop()
+                HoverHandler {
+                    onHoveredChanged: {
+                        if (hovered) { hideTimer.stop() }
+                        else { hideTimer.start() }
                     }
                 }
             }
@@ -444,19 +430,20 @@ Rectangle {
             background: Rectangle {
                 color: "transparent"
 
-                MouseArea {
-                    id: volumeMouseArea
-                    anchors.fill: parent
-                    hoverEnabled: true  // 启用鼠标悬停
-                    propagateComposedEvents: true
-                    onPositionChanged: {
-                        videoPlayer.playFileList.close()
-                        hideTimer.stop()
-                        hideVolumeTimer.stop()
-                        volumeRec.height = 120
-                        volumeRec.width = 40
-                        progressHeight = 200;
-
+                HoverHandler {
+                    onHoveredChanged: {
+                        if (hovered) {
+                            videoPlayer.playFileList.close()
+                            hideTimer.stop()
+                            hideVolumeTimer.stop()
+                            volumeRec.height = 120
+                            volumeRec.width = 40
+                            progressHeight = 200;
+                        }
+                        else {
+                            hideTimer.start()
+                            hideVolumeTimer.start()
+                        }
                     }
                 }
             }
@@ -474,9 +461,7 @@ Rectangle {
             // 隐藏音量条的计时器
             Timer {
                 id: hideVolumeTimer
-                interval: 1200  // 1s后自动隐藏
-                // 鼠标不在按钮上时，开始计时
-                running: !volumeMouseArea.containsMouse
+                interval: 1200  // 1.2s后自动隐藏
                 repeat: false
                 onTriggered: {
                     volumeRec.height = 0
@@ -551,14 +536,11 @@ Rectangle {
             background: Rectangle {
                 color: "transparent"
 
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true  // 启用鼠标悬停
-                    propagateComposedEvents: true
-                    onPositionChanged: {
-                        hideTimer.stop()
+                HoverHandler {
+                    onHoveredChanged: {
+                        if (hovered) { hideTimer.stop() }
+                        else { hideTimer.start() }
                     }
-
                 }
             }
 
@@ -654,9 +636,7 @@ Rectangle {
                     Behavior on border.width {
                         NumberAnimation { duration: 100 }
                     }
-
                 }
-
 
                 onValueChanged: {
                     player.audioOutput.volume = value / 100
@@ -668,38 +648,37 @@ Rectangle {
                     }
                 }
 
-                        // 当进度条在拖放时，不要启动隐藏计时器，不要隐藏音量条
+                // 当进度条在拖放时，不要启动隐藏计时器，不要隐藏音量条
                 onPressedChanged: {
-                        if (pressed) {
-                            hideTimer.stop()
-                            hideVolumeTimer.stop()
-                        } else {
-                            hideTimer.restart()
-                            hideVolumeTimer.restart()
-                        }
+                    if (pressed) {
+                        hideTimer.stop()
+                        hideVolumeTimer.stop()
+                    } else {
+                        hideTimer.restart()
+                        hideVolumeTimer.restart()
                     }
-
-
-
                 }
+            }
 
-
-
+            HoverHandler {
+                onHoveredChanged: {
+                    if (hovered) {
+                        hideTimer.stop()
+                        hideVolumeTimer.stop()
+                    }
+                    else {
+                        hideTimer.start()
+                        hideVolumeTimer.start()
+                    }
+                }
+            }
         }
 
         SubtitleRec{
             id : subtitleRec
 
         }
-
-
-
-
     }
-
-
-
-
 
     // 设置背景渐变效果
     gradient: Gradient {

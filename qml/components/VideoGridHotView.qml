@@ -45,17 +45,17 @@ Item{
                 }
 
 
-                MouseArea{
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    onEntered: {
-                        background.color = "#50000000"
-                    }
-                    onExited: {
-                        background.color = "#00000000"
-                    }
-                }
+//                MouseArea{
+//                    anchors.fill: parent
+//                    hoverEnabled: true
+//                    cursorShape: Qt.PointingHandCursor
+//                    onEntered: {
+//                        background.color = "#50000000"
+//                    }
+//                    onExited: {
+//                        background.color = "#00000000"
+//                    }
+//                }
             }
         }
     }

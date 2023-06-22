@@ -33,7 +33,6 @@
         <file>assets/picture/no_video.png</file>
         <file>assets/icon/import.png</file>
         <file>assets/background/spot.png</file>
-        <file>qml/pages/SettingPage.qml</file>
-        <file>qml/components/BullectSettingDrawer.qml</file>
+        <file>assets/icon/systemSetting.png</file>
     </qresource>
 </RCC>

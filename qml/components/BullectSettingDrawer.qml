@@ -80,6 +80,4 @@ Drawer {
     ColorDialog {
         id: colorDialog
     }
-
-
 }
