@@ -15,19 +15,34 @@
 ## 初步界面设计
   ### 主界面
   
-  主界面原型图 : 以Windows的MediaPlayer为原型
+  主界面模型图 ：模仿Windows的Mediaplayer布局
   <div align = "center">
-      <img src= "https://github.com/SryAsuka/QtMediaPlayer/assets/96533248/188c0007-3ccf-462d-ac95-d62c51a04fdf" width = 600>
+      <img src= "introduce/picture/main_page.png" width = 600>
   </div>
-
+  
+  主界面原型图
+  <div align = "center">
+      <img src= "introduce/picture/main_pro.png" width = 600>
+  </div>
+  
+   - Header View ：实现主界面、播放界面、设置和及介绍界面的切换
+   - MainPage ：标题栏,右侧 "Open File" 可打开(*.mp4,*.avi,*.mkv)等视频文件
+   - RecentVideos GridView ：点击视频预览图，将会索引视频所在位置所有视频，呈现在RecommendVideos GridView中
+   - RecommendVideos GridView : 点击视频预览图，将会自动切换界面，播放视频
   
   ### 视频界面
+
+  视频界面原型图
+  <div align = "center">
+      <img src= "introduce/picture/player_pro.png" width = 600>
+  </div>
   
   
   ### 设置及其介绍界面
 
   
 ## 开发说明文档
+
 
 ## 用户说明文档
 
