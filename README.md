@@ -46,7 +46,7 @@
 
 ## 用户说明文档
 
-下载文档 [user_use_introduce_doc.docx](https://github.com/SryAsuka/QtMediaPlayer/blob/main/introduce/document/user_use_introduce_doc.docx)
+下载文档 [user_use_introduce_doc.docx](https://github.com/SryAsuka/QtMediaPlayer/blob/main/introduce/document/User_Introduction.docx)
     
 ## 致谢
   - 参考源码 [Harnuna](https://invent.kde.org/multimedia/haruna)
