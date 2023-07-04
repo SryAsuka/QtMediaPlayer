@@ -49,7 +49,8 @@ void QSubtitleProvider::readSrtSubFile(const QString &path)
 
         m_srtSub = parser->getSubtitles();
         qDebug()<<"sucess srt";
-    }
+    }else
+        qDebug()<<"error srt";
 }
 
 void QSubtitleProvider::getSrtSubText(double playTime){

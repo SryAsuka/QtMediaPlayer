@@ -125,6 +125,7 @@ void PlayListModel::getSiblingItems(QUrl url)
 
 QStringList PlayListModel::subFilePaths(int index)
 {
+
     // ensure the requested path is valid
     if (m_playlist.isEmpty()) {
         return QStringList();
@@ -137,6 +138,7 @@ QStringList PlayListModel::subFilePaths(int index)
 
 void PlayListModel::appendSubFile(int index,const QString &path)
 {
+    qDebug()<<path;
     m_playlist[index]-> appendSubFile(path);
 }
 

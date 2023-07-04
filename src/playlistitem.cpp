@@ -141,7 +141,7 @@ void PlayListItem::appendSubFile(const QString &path)
     QString suffix = fileInfo.suffix();
     if( suffix == "srt" || suffix == "ass")
     {
-        m_subFilesPaths.append(fileInfo.absoluteFilePath());
+        m_subFilesPaths.append(path.mid(7));
     }
 }
 

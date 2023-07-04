@@ -62,10 +62,8 @@ ApplicationWindow {
                 player{
                     source: stackView.vpath
                     onSourceChanged: {
-                        playFileList.playListView.currentIndex = stackView.vindex
                         player.play()
                         bShowPlayIcon()
-                        subProvider.selectedSubFile(mainPlaylist.setDefaultSub(stackView.vindex));
                     }
                 }
             }

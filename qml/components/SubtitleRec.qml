@@ -7,6 +7,7 @@
 import QtQuick
 import QtQuick.Controls 2.15
 import QtCore
+import QtQuick.Dialogs
 import QtQuick.Layouts
 
 Rectangle {
@@ -88,7 +89,12 @@ Rectangle {
                             elide: Text.ElideRight
                             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
 
+                            TapHandler{
+                                onTapped: subOpenDialog.open()
+                            }
+
                         }
+
                     }
 
             }
@@ -152,6 +158,18 @@ Rectangle {
                 hideTimer.start()
                 hideSubtitleTimer.start()
             }
+        }
+    }
+
+    FileDialog{
+        id:subOpenDialog
+        title: "Select a Subtitle files"
+        currentFolder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
+        fileMode: FileDialog.OpenFile
+        nameFilters: [ "Subtitle files (*.srt *.ass)" ]
+        onAccepted: {
+            mainPlaylist.appendSubFile(playFileList.playListView.currentIndex,selectedFile)
+            subList.model = mainPlaylist.subFilePaths(playFileList.playListView.currentIndex)
         }
     }
 }

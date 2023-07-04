@@ -90,16 +90,19 @@ Drawer {
                         filepath = path
                         bulletxml.initDanmu(filepath.replace(new RegExp(title + '$'), ' '), title)
 
-                        videoPlayer.player.play()
-                        bShowPlayIcon()
                         videoTitleBar.dVideoTitle.text = title
-
                         subProvider.selectedSubFile(mainPlaylist.setDefaultSub(listView.currentIndex));
+
                     }
                 }
             }
 
             }
+
+        Component.onCompleted: {
+            listView.currentIndex = stackView.vindex
+            subProvider.selectedSubFile(mainPlaylist.setDefaultSub(listView.currentIndex));
+        }
         }
 
     MouseArea{
