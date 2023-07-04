@@ -40,8 +40,6 @@ Drawer {
     property alias dListView: listView
     property string filepath: ""
 
-//    modal: true
-//    modal.backgroud: "blue"
 
     // 文件列表
     ScrollView{
@@ -56,8 +54,6 @@ Drawer {
 
             id: listView
             anchors.fill: parent
-
-
 
             currentIndex : 0
             model: mainPlaylist
@@ -92,7 +88,7 @@ Drawer {
 
                         // 初始化弹幕
                         filepath = path
-                        bulletxml.initDanmu(filepath.replace(new RegExp(title + '$'), ''), title)
+                        bulletxml.initDanmu(filepath.replace(new RegExp(title + '$'), ' '), title)
 
                         videoPlayer.player.play()
                         bShowPlayIcon()
@@ -122,7 +118,6 @@ Drawer {
     }
 
     Timer{
-
         id: closerTimer
         interval: 2000
         running: false
@@ -130,7 +125,6 @@ Drawer {
         onTriggered: {
             drawer.close()
         }
-
     }
 
 }

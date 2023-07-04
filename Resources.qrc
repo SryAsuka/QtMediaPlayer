@@ -34,5 +34,6 @@
         <file>assets/icon/import.png</file>
         <file>assets/background/spot.png</file>
         <file>assets/icon/systemSetting.png</file>
+        <file>assets/icon/open.svg</file>
     </qresource>
 </RCC>

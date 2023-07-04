@@ -21,6 +21,7 @@ RecentFilesModel::RecentFilesModel(QObject *parent):
     updateList();
     QSettings setting;
     qDebug()<<setting.value("recentFiles");
+//    clear();
 
 }
 RecentFilesModel::~RecentFilesModel(){

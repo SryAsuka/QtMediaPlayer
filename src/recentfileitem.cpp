@@ -21,7 +21,7 @@ RecentFileItem::RecentFileItem(const QString &path, QObject *parent) :ListItem(p
         setFileName(fileInfo.fileName());
         setFilePath(fileInfo.filePath());
         qDebug()<<fileInfo.filePath();
-        setThumbtail(th.createThumbnail(fileInfo.filePath(),40));
+        setThumbtail(th.createThumbnail(fileInfo.filePath(),200));
 
     }else{
         //return no_video

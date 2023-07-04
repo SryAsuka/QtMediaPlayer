@@ -17,6 +17,7 @@ int main(int argc, char *argv[])
 
     PlayListModel *playlist = new PlayListModel(nullptr);
     ModelThumnailProvider *playthumnail = new ModelThumnailProvider(playlist);
+
     QSubtitleProvider *SubProvider = new QSubtitleProvider(nullptr);
     BulletXml bulletxml;
     RecentFilesModel *recentlist = new RecentFilesModel(nullptr);

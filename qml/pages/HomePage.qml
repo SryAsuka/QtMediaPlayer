@@ -33,7 +33,10 @@ Item {
 
         //recommend recently played
         DetailRecommendPageView {
+            id:detailpage
 
+            anchors.top: layoutHeaderView.bottom
+            anchors.bottom: parent.bottom
 
         }
     }

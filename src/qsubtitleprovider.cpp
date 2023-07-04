@@ -26,7 +26,7 @@ void QSubtitleProvider::selectedSubFile(const QString &path)
         emit subTextChanged();
         readSrtSubFile(fileInfo.absoluteFilePath());
     } else if(suffix == "ass"){
-        qDebug()<<"The file is an STR file,but no method to parser";
+        qDebug()<<"The file is an ASS file,but no method to parser";
     } else if(suffix == "null"){
         qDebug()<<"do not show";
         m_srtSub.clear();
