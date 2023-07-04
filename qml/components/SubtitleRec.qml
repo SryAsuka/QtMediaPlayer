@@ -142,6 +142,7 @@ Rectangle {
                         subList.currentIndex = index
                         subProvider.selectedSubFile(modelData);
                         bCaptionOn = true
+
                     }
                 }
             }

@@ -404,7 +404,8 @@ Rectangle {
                             hideTimer.stop()
                             hideSubtitleTimer.stop()
                             subtitleRec.width = 180
-                            subtitleRec.height = 160                     
+                            subtitleRec.height = 160
+                            subtitleRec.sSubList.model =  mainPlaylist.subFilePaths(playFileList.playListView.currentIndex)
                         }
                         else {
                             hideTimer.start()
