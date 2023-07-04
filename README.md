@@ -15,9 +15,10 @@
 ## 初步界面设计
   ### 主界面
   
-    主界面原型图
-  
-    ![](https://github.com/SryAsuka/QtMediaPlayer/assets/96533248/188c0007-3ccf-462d-ac95-d62c51a04fdf)
+  主界面原型图 : 以Windows的MediaPlayer为原型
+  <div align = "center">
+      <img src= "https://github.com/SryAsuka/QtMediaPlayer/assets/96533248/188c0007-3ccf-462d-ac95-d62c51a04fdf" width = 600>
+  </div>
 
   
   ### 视频界面
