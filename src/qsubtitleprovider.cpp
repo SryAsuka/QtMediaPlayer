@@ -1,3 +1,8 @@
+/*  To abstract the recent/play list , make get thumbnail easier
+ *  Author: SryAsuka
+ *  Data: 2023.6
+**/
+
 #include "qsubtitleprovider.h"
 
 #include <QString>
@@ -16,11 +21,22 @@ void QSubtitleProvider::selectedSubFile(const QString &path)
     QString suffix = fileInfo.suffix();
     if(suffix == "srt"){
         qDebug()<<"The file is an STR file";
+        m_srtSub.clear();
+        m_subText.clear();
+        emit subTextChanged();
         readSrtSubFile(fileInfo.absoluteFilePath());
     } else if(suffix == "ass"){
-        qDebug()<<"The file is an STR file,but no method to parser";
-    } else {
-        qDebug()<<"cannot parser";
+        qDebug()<<"The file is an ASS file,but no method to parser";
+    } else if(suffix == "null"){
+        qDebug()<<"do not show";
+        m_srtSub.clear();
+        m_subText.clear();
+        emit subTextChanged();
+    }else{
+        qDebug()<<"error subtitle";
+        m_srtSub.clear();
+        m_subText.clear();
+        emit subTextChanged();
     }
 }
 
@@ -43,7 +59,6 @@ void QSubtitleProvider::getSrtSubText(double playTime){
         if( (startTime <= playTime) && (playTime <= endTime)) {
             setSubText(QString::fromStdString(element->getText()));
         }
-        qDebug()<<playTime;
     }
 }
 

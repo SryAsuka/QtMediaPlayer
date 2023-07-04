@@ -2,71 +2,78 @@ import QtQuick
 import QtQuick.Dialogs
 import QtQuick.Controls
 
-Drawer {
-    id: bullectDrawer
+Rectangle {
+
+    width: 0
+    height: 0
+    color : "#ffffff"
+
+
+    Behavior on width {
+        NumberAnimation { duration: 80 }
+    }
+    Behavior on height {
+        NumberAnimation { duration: 80 }
+    }
+
+
+    anchors.left: bulletSettingButton.left
+    anchors.leftMargin: -60
+    y:-160
+    radius: 5
+    clip: true
 
     property alias textColor: colorDialog.selectedColor
     property alias textSize: fontSizeBox.currentText
 
-    width: window.width * 0.35
-    height: 130
 
-    edge: Qt.LeftEdge
+//    // 返回按钮
+//    Button {
+//        id: returnButton
+//        anchors {
+//            verticalCenter: parent.verticalCenter
+//            right: parent.right
+//        }
 
-    topMargin: window.height - 230
+//        opacity: 0.8    // 设置透明度
+//        // 设置背景为透明
+//        background: Rectangle {
+//            color: "transparent"
+//        }
 
+//        // 图标设置
+//        icon.source: "qrc:/assets/icon/return.png"
+//        icon.height: 30
+//        icon.width: 30
 
-    background: Rectangle {
-        color: "#000000"
-        opacity: 0.9
-    }
-
-    // 返回按钮
-    Button {
-        id: returnButton
-        anchors {
-            verticalCenter: parent.verticalCenter
-            right: parent.right
-        }
-
-        opacity: 0.8    // 设置透明度
-        // 设置背景为透明
-        background: Rectangle {
-            color: "transparent"
-        }
-
-        // 图标设置
-        icon.source: "qrc:/assets/icon/return.png"
-        icon.height: 30
-        icon.width: 30
-
-        onClicked: {
-            videoPlayer.bullectSettingDrawer.close()
-        }
-    }
+//        onClicked: {
+//            videoPlayer.bullectSettingDrawer.close()
+//        }
+//    }
 
     Column {
         anchors {
-            right: returnButton.left
-            verticalCenter: returnButton.verticalCenter
+            verticalCenter: parent.verticalCenter
+            horizontalCenter: parent.horizontalCenter
         }
 
         Label {
             text: "Change font size"
-            color: "white"
+            color: "black"
         }
-property color textColor
+
         ComboBox {
             id: fontSizeBox
             model: ["10", "12", "14", "16", "18", "20", "22", "24", "26", "28", "30"]
             currentIndex: 0
 
             width: 100
+
         }
 
         Label {
             text: "Change font color"
-            color: "white"
+            color: "black"
         }
 
         Button {
@@ -81,5 +88,16 @@ property color textColor
         id: colorDialog
     }
 
-
+    HoverHandler {
+        onHoveredChanged: {
+            if (hovered) {
+                hideTimer.stop()
+                hideBullectSettingTimer.stop()
+            }
+            else {
+                hideTimer.start()
+                hideBullectSettingTimer.start()
+            }
+        }
+    }
 }

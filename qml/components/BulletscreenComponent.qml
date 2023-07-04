@@ -9,6 +9,9 @@ import QtQml.XmlListModel
 
 Item {
     id: bullectscreenComponent
+
+    property alias bulletSettingButton: bulletSetting
+
     property Timer hideTimer
     // 弹幕是否开启，默认开启
     property bool bBullet: true
@@ -16,24 +19,9 @@ Item {
     property int textSize
 
     property color textColor
-    property string str: ""
-    property var liststr: []
-    property int index: 0
+
     height: 30
     width: 700
-    Component.onCompleted: {
-            addItem();
-    }
-    //用于控制弹幕发射的定时器
-    Timer {
-             id:barragrTimer
-             interval: 1000
-             running: true
-             repeat: true
-             triggeredOnStart: false//后续点击的时候才加载
-             onTriggered: addItem()
-         }
-
 
     Item {
         id: bulletBar
@@ -52,14 +40,11 @@ Item {
             background: Rectangle {
                 color: "transparent"
 
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true  // 启用鼠标悬停
-                    propagateComposedEvents: true
-                    onPositionChanged: {
-                        hideTimer.stop()
+                HoverHandler {
+                    onHoveredChanged: {
+                        if (hovered) { hideTimer.stop() }
+                        else { hideTimer.start() }
                     }
-
                 }
             }
 
@@ -73,10 +58,6 @@ Item {
 
             onClicked: {
                 bBullet = !bBullet
-                if(bBullet)
-                    barragrTimer.start()
-                else
-                    barragrTimer.stop()
             }
         }
 
@@ -94,14 +75,19 @@ Item {
             background: Rectangle {
                 color: "transparent"
 
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true  // 启用鼠标悬停
-                    propagateComposedEvents: true
-                    onPositionChanged: {
-                        hideTimer.stop()
+                HoverHandler {
+                    onHoveredChanged: {
+                        if (hovered) {
+                            hideTimer.stop()
+                            hideBullectSettingTimer.stop()
+                            bullectSettingComponent.width = 150
+                            bullectSettingComponent.height = 120
+                        }
+                        else {
+                            hideTimer.start()
+                            hideBullectSettingTimer.start()
+                        }
                     }
-
                 }
             }
 
@@ -112,14 +98,15 @@ Item {
             ToolTip.visible: hovered
             ToolTip.text: "弹幕设置"
 
-            onClicked: {
-                // 弹幕设置
-                if( !videoPlayer.bullectSettingDrawer.opened){
-                    videoPlayer.bullectSettingDrawer.open()
-                }else{
-                    videoPlayer.bullectSettingDrawer.close()
+            // 隐藏弹幕设置的计时器
+            Timer {
+                id: hideBullectSettingTimer
+                interval: 1200  // 1s后自动隐藏
+                repeat: false
+                onTriggered: {
+                    bullectSettingComponent.height = 0
+                    bullectSettingComponent.width = 0
                 }
-
             }
         }
 
@@ -165,19 +152,11 @@ Item {
             }
 
             // 当鼠标在输入框内，不隐藏进度条
-            MouseArea {
-                anchors.fill: parent
-                hoverEnabled: true  // 启用鼠标悬停
-                propagateComposedEvents: true
-                onPressed: mouse.accepted = false
-
-                onEntered: {
-                    hideTimer.stop()
+            HoverHandler {
+                onHoveredChanged: {
+                    if (hovered) { hideTimer.stop() }
+                    else { hideTimer.start() }
                 }
-                onExited: {
-                    hideTimer.start()
-                }
-
             }
         }
 
@@ -205,7 +184,7 @@ Item {
 
             onClicked: {
                 if (bulletInput.text !== "") {
-                    sendBarrage()
+                    sendDanmu()
                     bulletInput.text = "";
                 }
             }
@@ -213,66 +192,42 @@ Item {
             background: Rectangle {
                 color: globalButtonColor
 
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true  // 启用鼠标悬停
-                    propagateComposedEvents: true
-                    onPositionChanged: {
-                        hideTimer.stop()
+                HoverHandler {
+                    onHoveredChanged: {
+                        if (hovered) { hideTimer.stop() }
+                        else { hideTimer.start() }
                     }
-
                 }
             }
         }
+
+        // 加载弹幕设置BullectSettingDrawer组件
+        BullectSettingDrawer {
+            id: bullectSettingComponent
+        }
     }
 
-//    function sendDanmu() {
-//        textSize = videoPlayer.bullectSettingDrawer.textSize
-//        textColor = videoPlayer.bullectSettingDrawer.textColor
-
-//        var timestamp
-//        var millseconds = player.position
-//        var minutes = Math.floor(millseconds / 60000)
-//        millseconds -= minutes * 60000
-//        var seconds = millseconds / 1000
-//        seconds = Math.round(seconds)
-//        // 返回 mm : ss 格式时间
-//        if(minutes < 10 & seconds < 10)
-//            timestamp =  "0" + minutes + ":0" + seconds
-//        else if(minutes >= 10 & seconds < 10)
-//            timestamp =  minutes + ":0" + seconds
-//        else if(minutes < 10 & seconds >= 10)
-//            timestamp =  "0" + minutes + ":" + seconds
-//        else    timestamp =  minutes + ":" + seconds
-
-//        bulletxml.saveDanmu(timestamp, bulletInput.text, textSize, textColor)
-//        // Add danmu to the ListView
-//        //videoPlayer.danmuModel.append({"content": content, "fontsize": 20, "color": "white"});
-//    }
-    function sendBarrage(){
+    function sendDanmu() {
         textSize = videoPlayer.bullectSettingDrawer.textSize
         textColor = videoPlayer.bullectSettingDrawer.textColor
-        str=bulletInput.text
-        liststr.push(str)
 
+        var timestamp
+        var millseconds = player.position
+        var minutes = Math.floor(millseconds / 60000)
+        millseconds -= minutes * 60000
+        var seconds = millseconds / 1000
+        seconds = Math.round(seconds)
+        // 返回 mm : ss 格式时间
+        if(minutes < 10 & seconds < 10)
+            timestamp =  "0" + minutes + ":0" + seconds
+        else if(minutes >= 10 & seconds < 10)
+            timestamp =  minutes + ":0" + seconds
+        else if(minutes < 10 & seconds >= 10)
+            timestamp =  "0" + minutes + ":" + seconds
+        else    timestamp =  minutes + ":" + seconds
+
+        bulletxml.saveDanmu(timestamp, bulletInput.text, textSize, textColor)
+        // Add danmu to the ListView
+        //videoPlayer.danmuModel.append({"content": content, "fontsize": 20, "color": "white"});
     }
-    function addItem()
-       { var oldy = Math.random()*500%200 ;
-            for (var i = 0 ; i < 1; ++i)
-            {
-
-              var component = Qt.createComponent("/root/barrage/qml/components/Barrage.qml");
-              if (component.status ===Component.Ready)
-              {
-                  var textitem = component.createObject(videoPlayer);
-                  oldy +=30;
-                  textitem.y = oldy;
-                  textitem.textstr = liststr[index];
-                  index++;
-              }
 }
-       }
-
-}
-
-

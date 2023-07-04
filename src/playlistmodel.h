@@ -42,7 +42,7 @@ public:
 
     //Listmodel 起手三样式
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    Q_INVOKABLE QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     virtual QHash<int, QByteArray> roleNames() const override;
 
     //清除记录
@@ -66,6 +66,7 @@ public:
     //返回视频相应的字幕list
     Q_INVOKABLE QStringList subFilePaths(int index = -1);
     Q_INVOKABLE void appendSubFile(int index,const QString &path);
+    Q_INVOKABLE QString setDefaultSub(int index = -1);
 
     //get,set,Changed
     Q_INVOKABLE bool getIsSibling() const;

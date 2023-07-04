@@ -13,6 +13,7 @@ Rectangle {
 
     property alias video: video
     property alias player: player
+    property alias pSubText: subtitleText
 
     // 是否全屏
     property bool bFullSreen: false
@@ -27,8 +28,6 @@ Rectangle {
 
     property PlayFileList playFileList: playFileListComponents
 
-    property BullectSettingDrawer bullectSettingDrawer: bullectSettingConmponents
-
     id: videoPlayer
     color: "black"
 
@@ -42,6 +41,10 @@ Rectangle {
         id: player
         audioOutput: AudioOutput {}
         videoOutput: video
+
+        onPositionChanged: {
+            subProvider.getSrtSubText(player.position)
+        }
     }
 
     //Fan: 加载VideoControl视频控制组件
@@ -87,11 +90,6 @@ Rectangle {
         id: playFileListComponents
 
         controlTime: hideProgressBarTimer
-    }
-
-    // 加载弹幕设置BullectSettingDrawer组件
-    BullectSettingDrawer {
-        id: bullectSettingConmponents
     }
 
     // 屏幕中间的播放按钮，点击一下视频暂停图标显示，再点击视频播放图标隐藏
@@ -147,7 +145,7 @@ Rectangle {
 
         // 鼠标移动时显示进度条和播放/暂停按钮，并启动计时器
         onPositionChanged: {
-            videoControl.progressHeight = 120
+            videoControl.progressHeight = 100
             videoTitleBar.videoTitleHeight = 80
             videoControl.opacity = 1;  // 修改透明度为1
             videoTitleBar.opacity = 1;
@@ -213,6 +211,24 @@ Rectangle {
         }
 
     }
+
+    //Subtitle Area
+    Text{
+        id : subtitleText
+        text: subProvider.subText
+        color: "#ffffff"
+        font.pixelSize: 25
+        font.bold :true
+
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            bottom: videoControl.top
+            bottomMargin: 20
+        }
+
+    }
+
+
 
     // 播放开始
     function videoPlay() {

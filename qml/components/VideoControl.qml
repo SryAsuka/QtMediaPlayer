@@ -5,6 +5,11 @@
  * 2023.6.14上午：增加滑块样式
  * 2023.6.14下午：增加进度条拖动功能
  * 2023.6.15上午：实现全屏
+ *
+ *  fix the bug
+ *  Author: SryAsuka
+ *  Data: 2023.6
+ *
  */
 import QtQuick
 import QtQuick.Controls
@@ -15,6 +20,8 @@ import "../pages"
 Rectangle {
     id: videoControl
     z:100
+
+    property alias subtitleButton: captionButton
 
     property int progressHeight: 0
     property MediaPlayer player
@@ -192,7 +199,6 @@ Rectangle {
 
     // 下方播放、弹幕区域
     Item {
-
         id: controlButton
 
         anchors {
@@ -202,7 +208,7 @@ Rectangle {
         }
         height: 60
 
-        // 上一个
+        // 后退按钮
         Button {
             id: upButton
             anchors {
@@ -216,14 +222,11 @@ Rectangle {
             background: Rectangle {
                 color: "transparent"
 
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true  // 启用鼠标悬停
-                    propagateComposedEvents: true
-                    onPositionChanged: {
-                        hideTimer.stop()
+                HoverHandler {
+                    onHoveredChanged: {
+                        if (hovered) { hideTimer.stop() }
+                        else { hideTimer.start() }
                     }
-
                 }
             }
 
@@ -253,12 +256,10 @@ Rectangle {
             background: Rectangle {
                 color: "transparent"
 
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true  // 启用鼠标悬停
-                    propagateComposedEvents: true
-                    onPositionChanged: {
-                        hideTimer.stop()
+                HoverHandler {
+                    onHoveredChanged: {
+                        if (hovered) { hideTimer.stop() }
+                        else { hideTimer.start() }
                     }
                 }
             }
@@ -281,7 +282,7 @@ Rectangle {
             }
         }
 
-        // 下一个
+        // 快进按钮
         Button {
             id: nextButton
             anchors {
@@ -295,14 +296,11 @@ Rectangle {
             background: Rectangle {
                 color: "transparent"
 
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true  // 启用鼠标悬停
-                    propagateComposedEvents: true
-                    onPositionChanged: {
-                        hideTimer.stop()
+                HoverHandler {
+                    onHoveredChanged: {
+                        if (hovered) { hideTimer.stop() }
+                        else { hideTimer.start() }
                     }
-
                 }
             }
 
@@ -333,7 +331,7 @@ Rectangle {
             id: videoSpeedButton
             anchors {
                 verticalCenter: parent.verticalCenter
-                right: captionButton.left
+                right: volumeButton.left
                 rightMargin: 20
             }
 
@@ -350,14 +348,11 @@ Rectangle {
             background: Rectangle {
                 color: "transparent"
 
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true  // 启用鼠标悬停
-                    propagateComposedEvents: true
-                    onPositionChanged: {
-                        hideTimer.stop()
+                HoverHandler {
+                    onHoveredChanged: {
+                        if (hovered) { hideTimer.stop() }
+                        else { hideTimer.start() }
                     }
-
                 }
             }
 
@@ -392,8 +387,9 @@ Rectangle {
             id: captionButton
             anchors {
                 verticalCenter: parent.verticalCenter
-                right: volumeButton.left
-                rightMargin: 20
+//                right: videoSpeedButton.left
+                left: bulletscreenComponent.right
+                leftMargin: -15
             }
 
             opacity: 0.8    // 设置透明度
@@ -401,12 +397,19 @@ Rectangle {
             background: Rectangle {
                 color: "transparent"
 
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true  // 启用鼠标悬停
-                    propagateComposedEvents: true
-                    onPositionChanged: {
-                        hideTimer.stop()
+                HoverHandler {
+                    onHoveredChanged: {
+                        if (hovered) { 
+                            videoPlayer.playFileList.close()
+                            hideTimer.stop()
+                            hideSubtitleTimer.stop()
+                            subtitleRec.width = 180
+                            subtitleRec.height = 160                     
+                        }
+                        else {
+                            hideTimer.start()
+                            hideSubtitleTimer.start()
+                        }
                     }
                 }
             }
@@ -422,9 +425,23 @@ Rectangle {
             onClicked: {
                 if(bCaptionOn){
                     bCaptionOn = false
-
+                    subProvider.selectedSubFile("null.null");
+                    subtitleRec.sSubList.currentIndex = -1
                 } else {
                     bCaptionOn = true
+                    subtitleRec.sSubList.currentIndex = 0
+                    subProvider.selectedSubFile(mainPlaylist.setDefaultSub(playFileList.playListView.currentIndex));
+                }
+
+            }
+            // 隐藏字幕的计时器
+            Timer {
+                id: hideSubtitleTimer
+                interval: 1200  // 1.2s后自动隐藏
+                repeat: false
+                onTriggered: {
+                    subtitleRec.height = 0
+                    subtitleRec.width = 0
                 }
             }
         }
@@ -444,19 +461,19 @@ Rectangle {
             background: Rectangle {
                 color: "transparent"
 
-                MouseArea {
-                    id: volumeMouseArea
-                    anchors.fill: parent
-                    hoverEnabled: true  // 启用鼠标悬停
-                    propagateComposedEvents: true
-                    onPositionChanged: {
-                        videoPlayer.playFileList.close()
-                        hideTimer.stop()
-                        hideVolumeTimer.stop()
-                        volumeRec.height = 120
-                        volumeRec.width = 40
-                        progressHeight = 200;
-
+                HoverHandler {
+                    onHoveredChanged: {
+                        if (hovered) {
+                            videoPlayer.playFileList.close()
+                            hideTimer.stop()
+                            hideVolumeTimer.stop()
+                            volumeRec.height = 120
+                            volumeRec.width = 40
+                        }
+                        else {
+                            hideTimer.start()
+                            hideVolumeTimer.start()
+                        }
                     }
                 }
             }
@@ -474,14 +491,11 @@ Rectangle {
             // 隐藏音量条的计时器
             Timer {
                 id: hideVolumeTimer
-                interval: 1200  // 1s后自动隐藏
-                // 鼠标不在按钮上时，开始计时
-                running: !volumeMouseArea.containsMouse
+                interval: 1200  // 1.2s后自动隐藏
                 repeat: false
                 onTriggered: {
                     volumeRec.height = 0
                     volumeRec.width = 0
-                    progressHeight = 120
                 }
             }
         }
@@ -551,14 +565,11 @@ Rectangle {
             background: Rectangle {
                 color: "transparent"
 
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true  // 启用鼠标悬停
-                    propagateComposedEvents: true
-                    onPositionChanged: {
-                        hideTimer.stop()
+                HoverHandler {
+                    onHoveredChanged: {
+                        if (hovered) { hideTimer.stop() }
+                        else { hideTimer.start() }
                     }
-
                 }
             }
 
@@ -591,7 +602,7 @@ Rectangle {
             color: "#ffffff"
             anchors.left: volumeButton.left
             anchors.leftMargin: -5
-            radius: 10
+            radius: 5
             y:-140
 
             Behavior on width {
@@ -618,7 +629,7 @@ Rectangle {
                 background: Rectangle{
                     anchors.verticalCenter: parent.verticalCenter
                     x: volumeSlider.leftPadding + 5
-                    color :  "#1195db"
+                    color :  globalButtonColor
                     height: volumeSlider.availableHeight
                     width: implicitWidth
                     implicitWidth: 4
@@ -654,9 +665,7 @@ Rectangle {
                     Behavior on border.width {
                         NumberAnimation { duration: 100 }
                     }
-
                 }
-
 
                 onValueChanged: {
                     player.audioOutput.volume = value / 100
@@ -668,38 +677,37 @@ Rectangle {
                     }
                 }
 
-                        // 当进度条在拖放时，不要启动隐藏计时器，不要隐藏音量条
+                // 当进度条在拖放时，不要启动隐藏计时器，不要隐藏音量条
                 onPressedChanged: {
-                        if (pressed) {
-                            hideTimer.stop()
-                            hideVolumeTimer.stop()
-                        } else {
-                            hideTimer.restart()
-                            hideVolumeTimer.restart()
-                        }
+                    if (pressed) {
+                        hideTimer.stop()
+                        hideVolumeTimer.stop()
+                    } else {
+                        hideTimer.restart()
+                        hideVolumeTimer.restart()
                     }
-
-
-
                 }
+            }
 
-
-
+            HoverHandler {
+                onHoveredChanged: {
+                    if (hovered) {
+                        hideTimer.stop()
+                        hideVolumeTimer.stop()
+                    }
+                    else {
+                        hideTimer.start()
+                        hideVolumeTimer.start()
+                    }
+                }
+            }
         }
 
         SubtitleRec{
             id : subtitleRec
 
         }
-
-
-
-
     }
-
-
-
-
 
     // 设置背景渐变效果
     gradient: Gradient {

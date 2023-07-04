@@ -12,7 +12,6 @@
 import QtQuick
 import QtQuick.Controls 2.15
 import QtCore
-import Qt.labs.folderlistmodel
 import QtQuick.Layouts
 
 
@@ -22,6 +21,7 @@ Drawer {
 
 
     property Timer controlTime
+    property alias playListView: listView
 
     width: 420
     height: parent.height - 150
@@ -40,8 +40,6 @@ Drawer {
     property alias dListView: listView
     property string filepath: ""
 
-//    modal: true
-//    modal.backgroud: "blue"
 
     // 文件列表
     ScrollView{
@@ -57,15 +55,14 @@ Drawer {
             id: listView
             anchors.fill: parent
 
-
-
+            currentIndex : 0
             model: mainPlaylist
             delegate: playlistdelegate
             highlight:
                 Rectangle {
-                color: globalButtonColor
-                radius: 5
-                opacity: 1
+                    color: globalButtonColor
+                    radius: 5
+                    opacity: 1
                 }
             highlightMoveDuration: 100
             highlightMoveVelocity: -1
@@ -91,11 +88,13 @@ Drawer {
 
                         // 初始化弹幕
                         filepath = path
-                        bulletxml.initDanmu(filepath.replace(new RegExp(title + '$'), ''), title)
+                        bulletxml.initDanmu(filepath.replace(new RegExp(title + '$'), ' '), title)
 
                         videoPlayer.player.play()
                         bShowPlayIcon()
                         videoTitleBar.dVideoTitle.text = title
+
+                        subProvider.selectedSubFile(mainPlaylist.setDefaultSub(listView.currentIndex));
                     }
                 }
             }
@@ -119,7 +118,6 @@ Drawer {
     }
 
     Timer{
-
         id: closerTimer
         interval: 2000
         running: false
@@ -127,7 +125,6 @@ Drawer {
         onTriggered: {
             drawer.close()
         }
-
     }
 
 }

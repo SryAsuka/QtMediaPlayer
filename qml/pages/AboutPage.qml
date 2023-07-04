@@ -15,14 +15,26 @@ Rectangle {
         BackGround{}
     }
 
-    // 鼠标拖动，必须放在最上方
-    MouseArea {
-        propagateComposedEvents: true
-        anchors.fill: parent
-        acceptedButtons: Qt.LeftButton
-        onPressed: setPoint(mouseX,mouseY)
-        onMouseXChanged: moveX(mouseX)
-        onMouseYChanged: moveY(mouseY)
+    // 鼠标拖动
+    Item {
+        anchors {
+            fill: parent
+            rightMargin: 10
+        }
+        PointHandler {
+            acceptedDevices: PointerDevice.Mouse
+            acceptedButtons: Qt.LeftButton
+            cursorShape: Qt.CrossCursor
+
+            onActiveChanged: setPoint(point.position.x, point.position.y)
+
+            onPointChanged: {
+                if (active) {
+                    moveX(point.position.x)
+                    moveY(point.position.y)
+                }
+            }
+        }
     }
 
     // 鼠标缩放区域
@@ -34,29 +46,32 @@ Rectangle {
         anchors.right: parent.right
         color: "transparent"
 
-        MouseArea {
-            id: resizeMouseArea
-            anchors.fill: parent
-            hoverEnabled: true
-            cursorShape: Qt.SizeBDiagCursor
-
+        PointHandler {
             property real startX: 0
             property real startY: 0
 
-            onPressed: {
-                startX = mouse.x
-                startY = mouse.y
+            acceptedDevices: PointerDevice.Mouse
+            acceptedButtons: Qt.LeftButton
+
+            onActiveChanged: {
+                if (active) {
+                    startX = point.position.x
+                    startY = point.position.y
+                }
             }
 
-            onPositionChanged: {
-                if (resizeMouseArea.pressed) {
-                    window.width += mouse.x - startX;
-                    window.height -= mouse.y - startY;
-                    window.y += mouse.y - startY;
+            onPointChanged: {
+                if (active) {
+                    window.width += point.position.x - startX;
+                    window.height -= point.position.y - startY;
+                    window.y += point.position.y - startY;
                 }
             }
         }
+
+        HoverHandler { cursorShape: Qt.SizeBDiagCursor }
     }
+
 
     // 返回按钮
     Button {

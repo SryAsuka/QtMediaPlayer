@@ -13,7 +13,7 @@ endif()
 #Qt
 find_package(
     Qt6 6.5 REQUIRED
-    Core COMPONENTS Quick Multimedia
+    Core COMPONENTS Quick Multimedia Core5Compat
     COMPONENTS Xml
 )
 #FFmpeg
@@ -100,6 +100,7 @@ target_link_libraries(appQtMediaPlayer
         Qt6::Multimedia
         Qt6::Xml
         PkgConfig::LIBAV
+        Qt6::Core5Compat
 )
 
 install(TARGETS appQtMediaPlayer

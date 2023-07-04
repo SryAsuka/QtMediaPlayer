@@ -28,7 +28,7 @@ ApplicationWindow {
 
     // 全局字体设置
     property string mFONT_FAMILY: "微软雅黑"
-    // 全局按钮设置
+    // 全局按钮颜色设置
     property color globalButtonColor: settings.gb
     // 全局背景颜色设置
     property color globalPageColor: settings.gp
@@ -37,30 +37,49 @@ ApplicationWindow {
     color: "#00000000"
     title: qsTr("Media Player")
 
-    Component {
-        id: homePage
-        HomePage { }
-    }
 
-    Component {
-        id: playerPage
-        PlayerPage { }
-    }
-
-    Component {
-        id: aboutPage
-        AboutPage { }
-    }
-
-    Component {
-        id: settingPage
-        SettingPage { }
-    }
 
     StackView {
         id: stackView
         anchors.fill: parent
         initialItem: homePage
+
+        property string vpath: vpath
+        property int vindex: vindex
+
+        Component {
+            id: homePage
+            HomePage { }
+        }
+
+        Component {
+            id: playerPage
+
+
+            PlayerPage {
+                id : pplayerPage
+
+                player{
+                    source: stackView.vpath
+                    onSourceChanged: {
+                        playFileList.playListView.currentIndex = stackView.vindex
+                        player.play()
+                        bShowPlayIcon()
+                        subProvider.selectedSubFile(mainPlaylist.setDefaultSub(stackView.vindex));
+                    }
+                }
+            }
+        }
+
+        Component {
+            id: aboutPage
+            AboutPage { }
+        }
+
+        Component {
+            id: settingPage
+            SettingPage { }
+        }
     }
 
     Settings {
@@ -72,11 +91,20 @@ ApplicationWindow {
     }
 
 
-    function changePageForHome() { stackView.replace( homePage ) }
+    function changePageForHome() {
+        stackView.replace( homePage )
+    }
 
-    function changePageForPlayer() { stackView.replace( playerPage ) }
+    function changePageForPlayer() {
+        stackView.push( playerPage )
+    }
 
-    function changePageForAbout() { stackView.replace( aboutPage ) }
+    function changePageForAbout() {
+        stackView.replace( aboutPage )
+    }
 
-    function changePageForSetting() { stackView.replace( settingPage ) }
+    function changePageForSetting() {
+        stackView.replace( settingPage )
+    }
+
 }

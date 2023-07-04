@@ -21,10 +21,7 @@
 
 PlayListModel::PlayListModel(QObject *parent): QAbstractListModel(parent)
 {
-//    appendItem(QUrl("file:///root/test.mp4"));
-//    getSiblingItems(QUrl("file:///root/test.mp4"));
     getSiblingItems(QUrl("file:///root/tmp/Three.Little.Pigs.1933.avi"));
-//getSiblingItems(QUrl("file://run/media/root/T7 Shield/动画/[VCB-Studio] Parasyte：The Maxim [Hi10p_1080p]/[VCB-Studio] Parasyte：The Maxim [01][Hi10p_1080p][x264_2flac].mkv"));
 }
 
 PlayListModel::~PlayListModel(){
@@ -95,11 +92,10 @@ void PlayListModel::getSiblingItems(QUrl url)
 
             //查询下一个
             QString siblingFile = it.next();
-            qDebug()<<siblingFile;
 
             //查询下一个是否为音频文件
             QFileInfo siblingFileInfo(siblingFile);
-            qDebug()<<siblingFile;
+
             auto siblingUrl = QUrl::fromLocalFile(siblingFile);
             QMimeType mimeType = mimeTypeCheck(siblingUrl);
             if(!siblingFileInfo.exists()){
@@ -118,9 +114,9 @@ void PlayListModel::getSiblingItems(QUrl url)
         //依次加入listitem中
         beginInsertRows(QModelIndex(), 0, siblingFiles.count() - 1);
         for (int i = 0; i < siblingFiles.count(); ++i) {
-            qDebug()<<i;
+
             auto item = new PlayListItem(siblingFiles.at(i), this);
-            qDebug()<<siblingFiles.at(i);
+
             m_playlist.append(item);
         }
         endInsertRows();
@@ -144,6 +140,10 @@ void PlayListModel::appendSubFile(int index,const QString &path)
     m_playlist[index]-> appendSubFile(path);
 }
 
+QString PlayListModel::setDefaultSub(int index){
+    return m_playlist[index]->setDefaultSub();
+}
+
 QString PlayListModel::getPath(int index)
 {
     // ensure the requested path is valid
@@ -157,17 +157,6 @@ QString PlayListModel::getPath(int index)
 }
 
 
-//QString PlayListModel::getPath(int index)
-//{
-//    // ensure the requested path is valid
-//    if (m_playlist.isEmpty()) {
-//        return QString();
-//    }
-//    if (m_playlist.size() <= index) {
-//        return m_playlist[0]->filePath();
-//    }
-//    return m_playlist[index]->filePath();
-//}
 
 void PlayListModel::removeItem(int index)
 {
