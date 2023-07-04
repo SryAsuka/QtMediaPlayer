@@ -65,6 +65,7 @@ ApplicationWindow {
                         playFileList.playListView.currentIndex = stackView.vindex
                         player.play()
                         bShowPlayIcon()
+                        subProvider.selectedSubFile(mainPlaylist.setDefaultSub(stackView.vindex));
                     }
                 }
             }
@@ -90,14 +91,20 @@ ApplicationWindow {
     }
 
 
-    function changePageForHome() { stackView.replace( homePage ) }
+    function changePageForHome() {
+        stackView.replace( homePage )
+    }
 
     function changePageForPlayer() {
         stackView.push( playerPage )
     }
 
-    function changePageForAbout() { stackView.replace( aboutPage ) }
+    function changePageForAbout() {
+        stackView.replace( aboutPage )
+    }
 
-    function changePageForSetting() { stackView.replace( settingPage ) }
+    function changePageForSetting() {
+        stackView.replace( settingPage )
+    }
 
 }
