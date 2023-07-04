@@ -515,19 +515,14 @@ Rectangle {
             background: Rectangle {
                 color: "transparent"
 
-                MouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true  // 启用鼠标悬停
-                    propagateComposedEvents: true
-                    onPositionChanged: {
-                        hideTimer.stop()
+                HoverHandler {
+                    onHoveredChanged: {
+                        if (hovered) {
+                            settingButton.rotation = 0
+                            rotateAnimation.start()
+                            hideTimer.stop()
+                        }
                     }
-
-                    onEntered: {
-                        settingButton.rotation = 0
-                        rotateAnimation.start()
-                    }
-
                 }
             }
 

@@ -35,6 +35,46 @@ Rectangle {
     VideoOutput {
         id: video
         anchors.fill: parent
+
+        z:100
+
+        TapHandler {
+            id:videoMouseArea
+            /*singleClick() */
+            // 避免 双击/单击 事件同时触发
+            property int clickNum: 0
+
+            onTapped: {
+                clickNum++
+                if (clickNum == 1) {
+                    timer.start()
+                }
+                if (clickNum == 2) {
+                    clickNum = 0
+                    timer.stop()
+                    dblClick()
+                }
+                videoControl.progressHeight = 100
+                videoTitleBar.videoTitleHeight = 80
+                videoControl.opacity = 1;  // 修改透明度为1
+                videoTitleBar.opacity = 1;
+                // 鼠标光标正常
+                mouseArea.cursorShape = "ArrowCursor"
+                hideProgressBarTimer.restart();
+
+            }
+        }
+
+        Timer {
+            id:timer
+            interval: 200
+            onTriggered: {
+                videoMouseArea.clickNum = 0
+                timer.stop()
+                singleClick()
+            }//计时超时，触发单击事件
+        }
+
     }
 
     MediaPlayer {
@@ -45,6 +85,8 @@ Rectangle {
         onPositionChanged: {
             subProvider.getSrtSubText(player.position)
         }
+
+
     }
 
     //Fan: 加载VideoControl视频控制组件
@@ -104,39 +146,10 @@ Rectangle {
         anchors.centerIn: parent
         color: "transparent"
 
-        MouseArea {
-            id:videoMouseArea
-            anchors.fill: parent
-            /*singleClick() */
-            // 避免 双击/单击 事件同时触发
-            acceptedButtons: Qt.LeftButton | Qt.RightButton
-            property int clickNum: 0
-            Timer {
-                id:timer
-                interval: 200
-                onTriggered: {
-                    videoMouseArea.clickNum = 0
-                    timer.stop()
-                    singleClick()
-                }//计时超时，触发单击事件
-            }
-            onClicked: {
-                clickNum++
-                if (clickNum == 1) {
-                    timer.start()
-                }
-                if (clickNum == 2) {
-                    clickNum = 0
-                    timer.stop()
-                    dblClick()
-                }
-
-            }
-        }
-
     }
 
     // 鼠标监听区域,实现鼠标移动视频控制组件、视频标题组件出现
+    // 由于input handler无法代替onPositionChanged,，为了功能的实现，因此我们将其保留
     MouseArea {
         id: mouseArea
         anchors.fill: parent
@@ -155,6 +168,7 @@ Rectangle {
         }
 
     }
+
 
     // 隐藏进度条的计时器，隐藏鼠标计时器
     Timer {

@@ -23,7 +23,7 @@ Item{
         anchors.fill: parent
 
         color: "transparent"
-
+        z:240
 
         RowLayout{
             anchors.fill: parent
@@ -106,7 +106,31 @@ Item{
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             }
 
+
+
         }
+        TapHandler{
+            id:tapHandler
+
+            gesturePolicy: TapHandler.ReleaseWithinBounds
+
+            onTapped: {
+                listView.currentIndex = index
+            }
+            onDoubleTapped: {
+                videoPlayer.player.source = "file://" + path
+
+                // 初始化弹幕
+                filepath = path
+                bulletxml.initDanmu(filepath.replace(new RegExp(title + '$'), ' '), title)
+
+                videoTitleBar.dVideoTitle.text = title
+                subProvider.selectedSubFile(mainPlaylist.setDefaultSub(listView.currentIndex));
+
+            }
+        }
+
+
 
     }
 

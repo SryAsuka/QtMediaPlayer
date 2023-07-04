@@ -75,26 +75,6 @@ Drawer {
             PlayListItem{
                 id: playListItem
 
-
-                MouseArea{
-                    id:mouseArea
-                    anchors.fill: parent
-
-                    onClicked: {
-                        listView.currentIndex = index
-                    }
-                    onDoubleClicked: {                       
-                        videoPlayer.player.source = "file://" + path
-
-                        // 初始化弹幕
-                        filepath = path
-                        bulletxml.initDanmu(filepath.replace(new RegExp(title + '$'), ' '), title)
-
-                        videoTitleBar.dVideoTitle.text = title
-                        subProvider.selectedSubFile(mainPlaylist.setDefaultSub(listView.currentIndex));
-
-                    }
-                }
             }
 
             }
@@ -105,18 +85,17 @@ Drawer {
         }
         }
 
-    MouseArea{
-        id : drawerArea
-        anchors.fill: parent
-        hoverEnabled: true
-        propagateComposedEvents: true
-        onExited: {
-            closerTimer.restart()
-            controlTime.restart()
-        }
-        onEntered: {
-            closerTimer.stop()
-            controlTime.stop()
+
+    HoverHandler {
+        onHoveredChanged: {
+            if (hovered) {
+                closerTimer.stop()
+                controlTime.stop()
+            }
+            else {
+                closerTimer.restart()
+                controlTime.restart()
+            }
         }
     }
 

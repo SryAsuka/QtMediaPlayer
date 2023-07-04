@@ -133,12 +133,13 @@ Rectangle {
                         }
                     }
                 }
-                MouseArea{
+                TapHandler{
                     id:mouseArea
 
-                    anchors.fill: parent
+                    gesturePolicy: TapHandler.ReleaseWithinBounds
 
-                    onClicked: {
+
+                    onTapped: {
                         subList.currentIndex = index
                         subProvider.selectedSubFile(modelData);
                         bCaptionOn = true
