@@ -1,0 +1,9 @@
+README.md filter=lfs diff=lfs merge=lfs -text
+Resources.qrc filter=lfs diff=lfs merge=lfs -text
+src filter=lfs diff=lfs merge=lfs -text
+assets filter=lfs diff=lfs merge=lfs -text
+CMakeLists.txt filter=lfs diff=lfs merge=lfs -text
+introduce filter=lfs diff=lfs merge=lfs -text
+LICENSE filter=lfs diff=lfs merge=lfs -text
+qml filter=lfs diff=lfs merge=lfs -text
+CMakeLists.txt.user filter=lfs diff=lfs merge=lfs -text
