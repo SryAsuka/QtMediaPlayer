@@ -39,13 +39,15 @@
   
   
   ### 设置及其介绍界面
-
   
 ## 开发说明文档
-
+  
+下载文档 [development_info_doc.docx](https://github.com/SryAsuka/QtMediaPlayer/blob/main/introduce/document/development_info_doc.docx)
 
 ## 用户说明文档
 
+下载文档 [user_use_introduce_doc.docx](https://github.com/SryAsuka/QtMediaPlayer/blob/main/introduce/document/user_use_introduce_doc.docx)
+    
 ## 致谢
   - 参考源码 [Harnuna](https://invent.kde.org/multimedia/haruna)
   - Srt字幕解析库 [Simple, yet powerful C++ SRT Subtitle Parser Library](https://github.com/saurabhshri/simple-yet-powerful-srt-subtitle-parser-cpp)
@@ -58,5 +60,6 @@
   
 ## 介绍视频
 
+ 下载视频 [video_introduce](https://github.com/SryAsuka/QtMediaPlayer/blob/main/introduce/video/video_introduce_lixinhang.mkv)
   
 
