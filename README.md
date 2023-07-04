@@ -3,23 +3,29 @@
 <br>
 <div>
     <img alt="C++" src="https://img.shields.io/badge/c++-20-%2300599C?logo=cplusplus">
-    <img alt="QT" src="https://img.shields.io/badge/Qt-6.5-%2300599C?logo=QT">
+    <img alt="QT" src="https://img.shields.io/badge/Qt-6.5-green?logo=QT">
 </div>
 <div>
     <img alt="platform" src="https://img.shields.io/badge/platform-Linux-blueviolet">
-</div>
-<div>
-    <img alt="license" src="https://img.shields.io/github/license/SryAsuka/QtMediaPlayer">
+    <img alt="license" src="https://img.shields.io/badge/Lincense-GPLv3-blue.svg">
 </div>
 <br>
 </div>
 
 ## 初步界面设计
   ### 主界面
-    
+  
+    主界面原型图
+  
+    ![](https://github.com/SryAsuka/QtMediaPlayer/assets/96533248/188c0007-3ccf-462d-ac95-d62c51a04fdf)
+
   
   ### 视频界面
+  
+  
   ### 设置及其介绍界面
+
+  
 ## 开发说明文档
 
 ## 用户说明文档
