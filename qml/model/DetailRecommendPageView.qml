@@ -173,7 +173,7 @@ Item{
 
                         onTapped: {
                             mainPlaylist.openFile("file://"+path)
-                            console.log(path)
+                            mainRecentlist.updateRecent("file://"+path)
 
                         }
                     }
