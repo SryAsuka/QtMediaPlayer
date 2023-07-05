@@ -32,13 +32,25 @@
   
   ### 视频界面
 
+  视频界面模型图
+    <div align = "center">
+      <img src= "introduce/picture/player_page.png" width = 600>
+  </div>
+  
+
   视频界面原型图
   <div align = "center">
       <img src= "introduce/picture/player_pro.png" width = 600>
   </div>
-  
+
+   - 鼠标移动呼出Videocontrol和VideoTitle
+   - 鼠标触碰呼出音量控件和字幕控件和弹幕控件
+   - 点击播放列表弹出列表界面，ListView双击可选择视频
+   - 拖动控制条可以控制时间
   
   ### 设置及其介绍界面
+
+  过于简单，未设置模型图与原型图。
   
 ## 开发说明文档
   
